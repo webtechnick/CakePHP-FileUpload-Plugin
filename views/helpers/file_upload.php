@@ -4,7 +4,7 @@
   * This helper REQUIRES the FileUploadComponent.
   *
   * @author: Nick Baker
-  * @version: 2.0
+  * @version: 3.0
   * @email: nick@webtechnick.com
   * @link: http://projects.webtechnick.com/file_upload
   * @svn: svn co https://svn.xp-dev.com/svn/nurvzy_file_upload

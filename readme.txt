@@ -6,7 +6,7 @@ INSTALL:
 copy the file_upload directory into your app/plugins/ directory
 
 SVN:
-svn checkout https://svn.xp-dev.com/svn/nurvzy_file_upload_plugin file_upload
+svn checkout https://svn2.xp-dev.com/svn/nurvzy-file-upload-plugin file_upload
 
 DOWNLOAD:
 http://projects.webtechnick.com/file_upload
