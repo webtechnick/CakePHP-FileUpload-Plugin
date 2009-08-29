@@ -136,8 +136,8 @@ If a fileModel is given, it will attempt to save the record of the uploaded file
 class UploadsController extends AppController {
 
   var $name = 'Uploads';
-  var $helpers = array('Html', 'Form');
-  var $components = array('FileUpload');
+  var $helpers = array('Html', 'Form', 'FileUpload.FileUpload');
+  var $components = array('FileUpload.FileUpload');
   
   function admin_add() {
     if(!empty($this->data)){
@@ -156,8 +156,8 @@ At any time you can remove a file by using the $this->FileUpload->removeFile($na
 class UploadsController extends AppController {
 
   var $name = 'Uploads';
-  var $helpers = array('Html', 'Form', 'FileUpload');
-  var $components = array('FileUpload');
+  var $helpers = array('Html', 'Form', 'FileUpload.FileUpload');
+  var $components = array('FileUpload.FileUpload');
   
   function admin_delete($id = null) {
     $upload = $this->Upload->findById($id);
