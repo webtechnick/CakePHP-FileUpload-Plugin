@@ -9,9 +9,12 @@ SVN:
 svn checkout https://svn2.xp-dev.com/svn/nurvzy-file-upload-plugin file_upload
 
 DOWNLOAD:
-http://projects.webtechnick.com/file_upload
+http://projects.webtechnick.com/file_upload_plugin
 
-README:  
+BLOG ARTICLE:
+http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
+
+BAKERY ARTICLE:  
 For More documentation visit the bakery @ http://bakery.cakephp.org/articles/view/file-upload-component-w-automagic-model-optional
 
 CHANGELOG:
