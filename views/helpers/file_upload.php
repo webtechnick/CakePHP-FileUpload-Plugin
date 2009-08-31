@@ -80,7 +80,7 @@ class FileUploadHelper extends AppHelper{
       $options['width'] = $width;
     }
     $this->options = array_merge($this->options, $options);
-    
+      
     $img = false;
     if(is_string($name)){
       $img = $this->_getImageByName();
@@ -192,10 +192,9 @@ class FileUploadHelper extends AppHelper{
   function _getImageByName(){
     //only proceed if we actually have the file in question
     if(!$this->_isOutsideSource() && !file_exists($this->_getFullPath())) return false;
-  
     //resize if we have resize on, a width, and if it doesn't already exist.
     if($this->autoResize && $this->options['width'] > 0 && !file_exists($this->_getResizeNameOrPath($this->_getFullPath()))){
-       $this->_resizeImage();
+      $this->_resizeImage();
     }
     return $this->_htmlImage();
   }
@@ -223,7 +222,7 @@ class FileUploadHelper extends AppHelper{
       $new_image->resize_limitwh($this->options['width'], 0, $this->_getResizeNameOrPath($this->_getFullPath()));
     }
     else {
-      $this->autoResize = false;
+      //$this->autoResize = false;
     }
   }
   
