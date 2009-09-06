@@ -275,7 +275,7 @@ class FileUploadComponent extends Object{
       $save_data[$this->fields['size']] = $this->uploadedFile['size'];
       if(!$model || $model->save($save_data)){
         $this->success = true;
-        $this->uploadId = $model->id;
+        if($model) $this->uploadId = $model->id;
       }
       else{
         $this->success = false;
