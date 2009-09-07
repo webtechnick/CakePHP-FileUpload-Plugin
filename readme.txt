@@ -48,7 +48,7 @@ function beforeFilter(){
 }
 ?>
 
-Then it will attempt to copy the file to your uploads directory set by $this->FileUpload->upload_dir:
+Then it will attempt to copy the file to your uploads directory set by $this->FileUpload->uploadDir:
 <?php 
 function beforeFilter(){
   parent::beforeFilter();
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `uploads` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 Default fields are name, type, and size; but you can change that at anytime using the $this->FileUpload->fields = array();
 <?php 
