@@ -21,7 +21,7 @@
   */
 class FileUploadHelper extends AppHelper{
   var $helpers = array('Html', 'Form');
-  
+    
   /************************************************
     * the name of the file passed in.
     */
@@ -217,9 +217,9 @@ class FileUploadHelper extends AppHelper{
     * @return null
     */
   function _resizeImage(){
-    $new_image = new RResizeImage($this->_getFullPath());
-    if($new_image->imgWidth > $this->options['width']){
-      $new_image->resize_limitwh($this->options['width'], 0, $this->_getResizeNameOrPath($this->_getFullPath()));
+    $this->newImage = new RResizeImage($this->_getFullPath());
+    if($this->newImage->imgWidth > $this->options['width']){
+      $this->newImage->resize_limitwh($this->options['width'], 0, $this->_getResizeNameOrPath($this->_getFullPath()));
     }
     else {
       //$this->autoResize = false;
@@ -232,7 +232,18 @@ class FileUploadHelper extends AppHelper{
     * @return String HTML image asked for
     */
   function _htmlImage(){
-    $image = (!$this->_isOutsideSource() && $this->autoResize && $this->options['width'] > 0) ? $this->_getResizeNameOrPath($this->_getImagePath()) : $this->_getImagePath();
+    if(!$this->_isOutsideSource() && $this->autoResize && $this->options['width'] > 0){
+      if(isset($this->newImage) && $this->newImage->imgWidth < $this->options['width']){
+        $image = $this->_getImagePath();
+      }
+      else {
+        $image = $this->_getResizeNameOrPath($this->_getImagePath());
+      }
+    }
+    else {
+      $image = $this->_getImagePath();
+    }
+    
     $options = $this->options; //copy
     //unset the default options
     unset($options['resizedDir']);
