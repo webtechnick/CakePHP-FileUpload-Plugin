@@ -254,6 +254,7 @@ class FileUploadHelper extends AppHelper{
       return $image;
     }
     else {
+      unset($options['image_path_only']);
       return $this->Html->image($image, $options); 
     }
   }
