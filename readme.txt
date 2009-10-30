@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `uploads` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 Optionally, you can run the schema in a terminal like so:
-cake schema run create -path plugins\file_upload\config\sql -name upload
+cake schema run create -path plugins/file_upload/config/sql -name upload
 
 Default fields are name, type, and size; but you can change that at anytime using the $this->FileUpload->fields = array();
 <?php 
