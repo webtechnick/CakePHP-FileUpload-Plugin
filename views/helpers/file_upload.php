@@ -46,11 +46,19 @@ class FileUploadHelper extends AppHelper{
   
   /************************************************
     * Default options for showImage
+    *
+    * width: the width of the image to display (0 means no resizing (default))
+    * resizedDir: is the directory in which to save the resized files into (resized by default)
+    * imagePathOnly: will only return the requested image_path (false by default)
+    * autoResize: will resize the file automatically if given a valid width. (true by default)
+    * resizeThumbOnly: will only resize the image down -- not up past the original's size (true by default)
     */
   var $options = array(
     'width' => 0, //0 means no resizing
     'resizedDir' => 'resized', // make sure webroot/files/resized is chmod 777
-    'image_path_only' => false
+    'imagePathOnly' => false, //if true, will only return the requested image_path
+    'autoResize' => true, //if true, will resize the file automatically if given a valid width.
+    'resizeThumbOnly' => true //if true, will only resize the image down -- not up past the original's size
   );
   
   /************************************************
@@ -193,7 +201,7 @@ class FileUploadHelper extends AppHelper{
     //only proceed if we actually have the file in question
     if(!$this->_isOutsideSource() && !file_exists($this->_getFullPath())) return false;
     //resize if we have resize on, a width, and if it doesn't already exist.
-    if($this->autoResize && $this->options['width'] > 0 && !file_exists($this->_getResizeNameOrPath($this->_getFullPath()))){
+    if($this->options['autoResize'] && $this->options['width'] > 0 && !file_exists($this->_getResizeNameOrPath($this->_getFullPath()))){
       $this->_resizeImage();
     }
     return $this->_htmlImage();
@@ -232,7 +240,7 @@ class FileUploadHelper extends AppHelper{
     * @return String HTML image asked for
     */
   function _htmlImage(){
-    if(!$this->_isOutsideSource() && $this->autoResize && $this->options['width'] > 0){
+    if(!$this->_isOutsideSource() && $this->options['autoResize'] && $this->options['width'] > 0){
       if(isset($this->newImage) && $this->newImage->imgWidth < $this->options['width']){
         $image = $this->_getImagePath();
       }
@@ -246,15 +254,15 @@ class FileUploadHelper extends AppHelper{
     
     $options = $this->options; //copy
     //unset the default options
-    unset($options['resizedDir']);
-    unset($options['uploadDir']);
-    if(!$this->_isOutsideSource() && ($this->resizeThumbOnly || !$options['width'])) unset($options['width']); 
+    unset($options['resizedDir'], $options['uploadDir'], $options['imagePathOnly'], $options['autoResize'], $options['resizeThumbOnly']);
+    //unset width only if we're not an outsourced image, we have resize turned on, or we don't have a width to begin with.
+    if(!$this->_isOutsideSource() && ($this->options['resizeThumbOnly'] || !$options['width'])) unset($options['width']); 
     
-    if($this->options['image_path_only']){
+    //return the impage path or image html
+    if($this->options['imagePathOnly']){
       return $image;
     }
     else {
-      unset($options['image_path_only']);
       return $this->Html->image($image, $options); 
     }
   }
