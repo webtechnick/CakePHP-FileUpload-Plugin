@@ -7,7 +7,7 @@
 * @copyright    Copyright 2009, Webtechnick
 * @link         http://www.webtechnick.com
 * @author       Nick Baker
-* @version      3.0
+* @version      3.5
 * @license      MIT
 */
 class FileUploadComponent extends Object{
@@ -80,12 +80,20 @@ class FileUploadComponent extends Object{
   var $uploadDetected = false;
   
   /***************************************************
-    * This will hold the uploadedFile array if there is one
+    * This will hold the uploadedFiles array if there is one, or multiple
     *
     * @var boolean|array
     * @access public
     */
-  var $uploadedFile = false;
+  var $uploadedFiles = false;
+  
+  /***************************************************
+    * This will hold the currentFile being used array if there is one
+    *
+    * @var boolean|array
+    * @access public
+    */
+  var $currentFile = false;
   
   /***************************************************
    * holds true if an upload is pending and needs to be processed
@@ -123,10 +131,10 @@ class FileUploadComponent extends Object{
     * This is the file name of the final file that was uploaded
     * to the uploadDir directory.
     *
-    * @var string
+    * @var array of strings showing the final file name
     * @access public
     */
-  var $finalFile = null;
+  var $finalFiles = array();
   
   /***************************************************
     * success is set if we have a fileModel and there was a successful save
@@ -153,13 +161,13 @@ class FileUploadComponent extends Object{
     UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.', //Introduced in PHP 5.1.0.
     UPLOAD_ERR_EXTENSION => 'File upload stopped by extension.' //Introduced in PHP 5.2.0.
   );
-    
+  
   /***************************************************
-    * uploadId is the final database id saved when a file is detected
-    * @var int
+    * uploadIds is the final database ids saved when files are detected
+    * @var array of ids of single or multiple files uploaded
     * @access public
     */
-  var $uploadId = 0;
+  var $uploadIds = array();
   
   /***************************************************
     * errors holds any errors that occur as string values.
@@ -190,11 +198,13 @@ class FileUploadComponent extends Object{
     */
   function startup(&$controller){
     $this->uploadDetected = ($this->_multiArrayKeyExists("tmp_name", $this->data) || $this->_multiArrayKeyExists("tmp_name",$this->params));
-    $this->uploadedFile = $this->_uploadedFileArray();
-    if($this->_checkFile() && $this->_checkType()){
+    $this->uploadedFiles = $this->_uploadedFilesArray();
+    
+    if($this->uploadDetected){
       $this->hasFile = true;
-      if($this->automatic) { $this->processFile(); }
+      if($this->automatic) { $this->processAllFiles(); }
     }
+    
   }
   
   /*************************************************
@@ -213,11 +223,34 @@ class FileUploadComponent extends Object{
     $target_path = $up_dir . DS . $name;
     
     //delete main image -- $name
-    if(unlink($target_path)){
+    if(@unlink($target_path)){
       return true;
     } else {
       return false;
     }
+  }
+  
+  /*************************************************
+    * removeFile removes a specific file from the uploaded directory
+    *
+    * @param string | int $id A reference to the filename to delete from the uploadDirectory
+    * @return boolean
+    * @access public
+    */
+  function removeFileById($id = null){
+    if(!$id){
+      return false;
+    }
+    
+    $model =& $this->getModel();
+    if(!$model){
+      $this->_error('FileUpload::removeFileById -- no model detected.');
+      return false;
+    }
+    
+    $upload = $model->findById($id);
+    $name = $upload[$this->fileModel][$this->fields['name']];
+    return $this->removeFile($name);
   }
   
   /*************************************************
@@ -250,8 +283,14 @@ class FileUploadComponent extends Object{
     * @access public
     */
   function processFile(){
+    //Backporting for manual use processFile(), show error when using.
+    if(count($this->uploadedFiles) && empty($this->currentFile)){
+      $this->_error('FileUpload: You\'re using a deprecated standard of uploading files manually.  Don\'t call processFile() directly. Instead, call processAllFiles().');
+      $this->setCurrentFile($this->uploadedFiles[0]);
+    }
+    
     $up_dir = WWW_ROOT . $this->uploadDir;
-    $target_path = $up_dir . DS . $this->uploadedFile['name'];
+    $target_path = $up_dir . DS . $this->currentFile['name'];
     $temp_path = substr($target_path, 0, strlen($target_path) - strlen($this->_ext())); //temp path without the ext
     //make sure the file doesn't already exist, if it does, add an itteration to it
 		$i=1;
@@ -262,28 +301,53 @@ class FileUploadComponent extends Object{
     
     //Ability to dynamically add other model fields added by Jon Langevin
     $save_data = array();
+    
     if($this->fileModel){
       $save_data = $this->data[$this->fileModel];
-      unset($save_data['file']);
+      //Unset uploaded file details, only using our saved data.
+      for($i=0;$i<count($this->uploadedFiles);$i++){
+        unset($save_data[$i]);
+      }
     }
-    if(move_uploaded_file($this->uploadedFile['tmp_name'], $target_path)){
-      //Final File Name
-      $this->finalFile = basename($target_path);
-      $model =& $this->getModel();
+    
+    if(move_uploaded_file($this->currentFile['tmp_name'], $target_path)){
+      $this->finalFile[] = basename($target_path);
+      $this->finalFile = basename($target_path); //backported.  //finalFile is now depreciated
       $save_data[$this->fields['name']] = $this->finalFile;
-      $save_data[$this->fields['type']] = $this->uploadedFile['type'];
-      $save_data[$this->fields['size']] = $this->uploadedFile['size'];
+      $save_data[$this->fields['type']] = $this->currentFile['type'];
+      $save_data[$this->fields['size']] = $this->currentFile['size'];
+      $model =& $this->getModel();
       if(!$model || $model->save($save_data)){
         $this->success = true;
-        if($model) $this->uploadId = $model->id;
-      }
-      else{
-        $this->success = false;
+        if($model){
+          $this->uploadIds[] = $model->id;
+          $this->uploadId = $model->id; //backported. //uploadId is now depreciated.
+          $model->create(); //get ready for the next one.
+        }
       }
     }
     else{
       $this->_error('FileUpload::processFile() - Unable to save temp file to file system.');
     }
+  }
+  
+  /***************************************************
+    *
+    */
+  function processAllFiles(){
+    foreach($this->uploadedFiles as $file){
+      $this->setCurrentFile($file);
+      if($this->_checkFile() && $this->_checkType()){
+        $this->processFile();
+      }
+    }
+  }
+  
+  /***************************************************
+    *
+    */
+  function setCurrentFile($file){
+    $this->currentFile = $file[$this->fileVar];
   }
   
   /***************************************************
@@ -336,11 +400,11 @@ class FileUploadComponent extends Object{
     */
   function _checkType(){
     foreach($this->allowedTypes as $value){
-      if(strtolower($this->uploadedFile['type']) == strtolower($value)){
+      if(strtolower($this->currentFile['type']) == strtolower($value)){
         return true;
       }
     }
-    $this->_error("FileUpload::_checkType() {$this->uploadedFile['type']} is not in the allowedTypes array.");
+    $this->_error("FileUpload::_checkType() {$this->currentFile['type']} is not in the allowedTypes array.");
     return false;
   }
   
@@ -351,12 +415,12 @@ class FileUploadComponent extends Object{
      * @access protected
      */
     function _checkFile(){
-      if($this->uploadDetected && $this->uploadedFile){
-        if($this->uploadedFile['error'] == UPLOAD_ERR_OK ) {
+      if($this->uploadDetected && $this->currentFile){
+        if($this->currentFile['error'] == UPLOAD_ERR_OK ) {
           return true;
         }
         else {
-          $this->_error($this->upload_errors[$this->uploadedFile['error']]);
+          $this->_error($this->upload_errors[$this->currentFile['error']]);
         }
       }        
       return false;
@@ -369,27 +433,57 @@ class FileUploadComponent extends Object{
     * @access protected
     */
   function _ext(){
-    return strrchr($this->uploadedFile['name'],".");
+    return strrchr($this->currentFile['name'],".");
   }
   
   /***************************************************
     * Returns an array of the uploaded file or false if there is not a file
     *
-    * @param string $text String of error message to save
     * @return array|boolean Array of uploaded file, or false if no file uploaded
     * @access protected
     */
-  function _uploadedFileArray(){
-    if($this->fileModel){
-      $retval = isset($this->data[$this->fileModel][$this->fileVar]) ? $this->data[$this->fileModel][$this->fileVar] : false;
+  function _uploadedFilesArray(){
+    $retval = array();
+    if($this->fileModel){ //Model
+      if(isset($this->data[$this->fileModel][$this->fileVar])) {
+        $retval[] = $this->data[$this->fileModel][$this->fileVar];
+      }
+      elseif(isset($this->data[$this->fileModel][0][$this->fileVar])){
+        $retval = $this->data[$this->fileModel];
+      }
+      else {
+        $retval = false;
+      }
     }
-    else {
-      $retval = isset($this->params['form'][$this->fileVar]) ? $this->params['form'][$this->fileVar] : false;
+    else { // No model
+      if(isset($this->params['form'][$this->fileVar])){
+        $retval[] = $this->params['form'][$this->fileVar];
+      }
+      elseif($this->data[$this->fileVar][0]){ //syntax for multiple files without a model is data[file][0]..data[file][1]..data[file][n]
+        $retval = $this->data[$this->fileVar];
+      }
+      elseif(isset($this->params['form'][$this->fileVar][0])) {
+        $this->_error("FileUpload: Multiple Files were detected without a model present, with the improper syntax. Use this naming scheme for your inputs: data[file][0]..data[file][1]..data[file][n]");
+        $retval = false;
+      }
+      else {
+        $retval = false;
+      }
     }
     
+    //cleanup array. unset any file in the array that wasn't actually uploaded.
+    if($retval){
+      foreach($retval as $key => $file){
+        if($file[$this->fileVar]['error'] == UPLOAD_ERR_NO_FILE){
+          unset($retval[$key]);
+        }
+      }
+    }
+    //spit out an error if a file was detected but nothing is being returned by this method.
     if($this->uploadDetected && $retval === false){
       $this->_error("FileUpload: A file was detected, but was unable to be processed due to a misconfiguration of FileUpload. Current config -- fileModel:'{$this->fileModel}' fileVar:'{$this->fileVar}'");
     }
+    
     return $retval;
   }
   

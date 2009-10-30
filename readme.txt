@@ -1,12 +1,12 @@
 AUTHOR: Nick Baker
-VERSION: 3.0
+VERSION: 3.5
 EMAIL: nick@webtechnick.com
 
 INSTALL:
 copy the file_upload directory into your app/plugins/ directory
 
 SVN:
-svn checkout https://svn2.xp-dev.com/svn/nurvzy-file-upload-plugin file_upload
+svn checkout http://svn2.xp-dev.com/svn/nurvzy-file-upload-plugin file_upload
 
 DOWNLOAD:
 http://projects.webtechnick.com/file_upload_plugin
@@ -18,6 +18,7 @@ BAKERY ARTICLE:
 For More documentation visit the bakery @ http://bakery.cakephp.org/articles/view/file-upload-component-w-automagic-model-optional
 
 CHANGELOG:
+   3.5: Added multi file support. (API changes: $uploadId now depreciated, use $uploadIds[0] instead.  $finalFile now depreciated, use $finalFiles[0] instead.)
    3.0: Converted Component and Helper into a plugin for easy management between projects
    2.0.1: Bug Fixes
    2.0: Release of FileUploadHelper
@@ -93,7 +94,7 @@ Default fields are name, type, and size; but you can change that at anytime usin
 function beforeFilter(){
   parent::beforeFilter();
   //fill with associated array of name, type, size to the corresponding column name
-  $this->FileUpload->fields = array('name'=> 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+  $this->FileUpload->fields = array('name'=> 'name', 'type' => 'type', 'size' => 'size');
 }
 ?>
 
@@ -101,10 +102,20 @@ function beforeFilter(){
 Example view WITH Model WITH Helper:
 <?= $fileUpload->input(); ?>
 
+Upload Multiple Files *NEW*
+The new helper will do all the hard work for you, you can just output input multiple times
+to allow for more than one file to be uploaded at a time.
+<?= $fileUpload->input(); ?>
+<?= $fileUpload->input(); ?>
+<?= $fileUpload->input(); ?>
+
 Example View WITH Model WITHOUT Helper:
-<?= $form->create('Upload', array('type'=>'file')); ?>
 <?= $form->input('file', array('type'=>'file')); ?>
-<?= $form->end('Submit')); ?>
+
+Uploading Multiple Files *NEW*
+<?= $form->input('Upload.0.file', array('type'=>'file')); ?>
+<?= $form->input('Upload.1.file', array('type'=>'file')); ?>
+<?= $form->input('Upload.3.file', array('type'=>'file')); ?>
 
 
 
@@ -122,14 +133,21 @@ If you wish to NOT use a model simply set $this->FileUpload->fileModel = null; i
 
 ==== VIEW WITHOUT MODEL ====
 Example View WITHOUT a Model:
-<form action="controller/action" method="post" enctype="multipart/form-data">
 <input type="file" name="file" />
-<input type="submit" name="Submit" />
-</form>
-
 
 Example view WITHOUT Model WITH Helper:
 <?= $fileUpload->input(array('var' => 'file', 'model' => false)); ?>
+
+Multiple File Uploading *NEW*
+The helper will do all the work for you, just output input multiple times and the rest will be done for you.
+<?= $fileUpload->input(array('var' => 'file', 'model' => false)); ?>
+<?= $fileUpload->input(array('var' => 'file', 'model' => false)); ?>
+<?= $fileUpload->input(array('var' => 'file', 'model' => false)); ?>
+
+Without Helper example:
+<input type="file" name="data[file][0]" />
+<input type="file" name="data[file][1]" />
+<input type="file" name="data[file][2]" />
 
 
 
@@ -168,7 +186,7 @@ class UploadsController extends AppController {
   function admin_delete($id = null) {
     $upload = $this->Upload->findById($id);
     if($this->FileUpload->removeFile($upload['Upload']['name'])){
-      if($this->Upload->del($id)){
+      if($this->Upload->delete($id)){
         $this->Session->setFlash('Upload deleted');
         $this->redirect(array('action'=>'index'));
       }
@@ -185,7 +203,10 @@ Example with FileUploadHelper:
 $fileUpload->image($photo);
 
 
-Simple as that. Automagic File Uploading. I hope you enjoy it. If you read through the documentation I've written in the actual FileUpload Component it will give you detailed examples and explanations of each variable/function. Comments are appreciated.
+======================== MULTIPLE FILE UPLOADS *NEW* ========================
+In version 3.5, I've worked hard to get multipe file uploading as easy as possible for both
+model configurations and non-model configurations.  Look above for fileUploadHelper examples.
+
 
 
 ADDITIONAL CONTRIBUTIONS:
@@ -193,7 +214,10 @@ ADDITIONAL CONTRIBUTIONS:
 @Elmer 2/9/2009 (http://bakery.cakephp.org/articles/view/file-upload-component-w-automagic-model-optional):
 "As long as the automatic var is true (default), the component works as always. But if it is set to false, processFile() is no longer called automatically. From my controller I can now set an upload folder and call processFile() when I'm ready."
 
+You can turn off automatic file uploading by setting $this->FileUpload->automatic = false; in a beforeFilter.
+Then you would call processAllFiles() when you see fit like so:
+
 if ($this->FileUpload->hasFile) {
     $this->FileUpload->uploadDir = 'files/sub/dir/1/2/3';
-    $this->FileUpload->processFile();
+    $this->FileUpload->processAllFile();
 } 

@@ -4,10 +4,10 @@
   * This helper REQUIRES the FileUploadComponent.
   *
   * @author: Nick Baker
-  * @version: 3.0
+  * @version: 3.5
   * @email: nick@webtechnick.com
-  * @link: http://projects.webtechnick.com/file_upload
-  * @svn: svn co https://svn.xp-dev.com/svn/nurvzy_file_upload
+  * @link: http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
+  * @svn: svn checkout http://svn2.xp-dev.com/svn/nurvzy-file-upload-plugin file_upload
   *
   *  USAGE:
   *      Show an already uploaded image
@@ -33,16 +33,9 @@ class FileUploadHelper extends AppHelper{
   var $FileUpload = NULL;
   
   /************************************************
-    * autoResize will resize the file for quicker thumbnail displays
+    * Counts the number of inputs, for multiple fileUpload inputing.
     */
-  var $autoResize = true;
-  
-  /************************************************
-    * resizeThumbOnly means passing in widths larger than the origial image
-    * will not use the GD Library to resize nor will it ask the browser to resize.
-    * default true
-    */
-  var $resizeThumbOnly = true;
+  var $inputCount = 0;
   
   /************************************************
     * Default options for showImage
@@ -120,10 +113,11 @@ class FileUploadHelper extends AppHelper{
     $configs = $options;
     if($configs['model']){
       unset($options['model'], $options['var']);
-      return $this->Form->input("{$configs['model']}.{$configs['var']}", array_merge(array('type'=>'file'), $options));
+      
+      return $this->Form->input("{$configs['model']}.".$this->inputCount++.".{$configs['var']}", array_merge(array('type'=>'file'), $options));
     }
     else {
-      return "<input type='file' name='{$configs['var']}' />";
+      return "<input type='file' name='data[{$configs['var']}][".$this->inputCount++."]' />";
     }
   }
   
