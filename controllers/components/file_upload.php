@@ -1,5 +1,5 @@
 <?php
-/***************************************************
+/**
 * FileUpload Component
 *
 * Manages uploaded files to be saved to the file system.
@@ -11,7 +11,7 @@
 * @license      MIT
 */
 class FileUploadComponent extends Object{
-  /***************************************************
+  /**
     * fileModel is the name of the model used if we want to 
     *  keep records of uploads in a database.
     * 
@@ -23,7 +23,7 @@ class FileUploadComponent extends Object{
     */
   var $fileModel = 'Upload';
   
-  /***************************************************
+  /**
     * uploadDir is the directory name in the webroot that you want
     * the uploaded files saved to.  default: files which means
     * webroot/files must exist and set to chmod 777
@@ -33,7 +33,7 @@ class FileUploadComponent extends Object{
     */
   var $uploadDir = 'files';
   
-  /***************************************************
+  /**
     * fileVar is the name of the key to look in for an uploaded file
     * For this to work you will need to use the
     * $form-input('file', array('type'=>'file)); 
@@ -46,7 +46,7 @@ class FileUploadComponent extends Object{
     */
   var $fileVar = 'file';
   
-  /***************************************************
+  /**
     * allowedTypes is the allowed types of files that will be saved
     * to the filesystem.  You can change it at anytime without
     * $this->FileUpload->allowedTypes = array('text/plain',etc...);
@@ -62,7 +62,7 @@ class FileUploadComponent extends Object{
     'image/x-png'
   );
   
-  /***************************************************
+  /**
     * fields are the fields relating to the database columns
     *
     * @var array
@@ -70,8 +70,8 @@ class FileUploadComponent extends Object{
     */
   var $fields = array('name'=>'name','type'=>'type','size'=>'size');
   
-  /***************************************************
-    * This will be true if an upload is detected even
+  /**
+    * uploadDetected will be true if an upload is detected even
     * if it can't be processed due to misconfiguration
     *
     * @var boolean
@@ -79,24 +79,24 @@ class FileUploadComponent extends Object{
     */
   var $uploadDetected = false;
   
-  /***************************************************
-    * This will hold the uploadedFiles array if there is one, or multiple
+  /**
+    * uploadedFiles will hold the uploadedFiles array if there is one, or multiple
     *
     * @var boolean|array
     * @access public
     */
   var $uploadedFiles = false;
   
-  /***************************************************
-    * This will hold the currentFile being used array if there is one
+  /**
+    * currentFile will hold the currentFile being used array if there is one
     *
     * @var boolean|array
     * @access public
     */
   var $currentFile = false;
   
-  /***************************************************
-   * holds true if an upload is pending and needs to be processed
+  /**
+   * hasFile will be true if an upload is pending and needs to be processed
    * 
    * @contributer Elmer (http://bakery.cakephp.org/articles/view/file-upload-component-w-automagic-model-optional)
    * @var boolean
@@ -104,10 +104,11 @@ class FileUploadComponent extends Object{
    */
   var $hasFile = false;
 
-  /***************************************************
+  /**
+   * automatic determines if the process of all files will be called automatically upon detection.
    * if true: files are processed as soon as they come in
    * if false: when a file is ready hasFile is set to true
-   * it is then up to the calling application to call processFile()
+   * it is then up to the calling application to call processAllFiles()
    * whenever it wants. this allows params to be changed per uploaded file
    * (save every file in a different folder for instance)
    *
@@ -117,7 +118,7 @@ class FileUploadComponent extends Object{
    */
   var $automatic = true; 
   
-  /***************************************************
+  /**
     * data and params are the controller data and params
     *
     * @var array
@@ -126,7 +127,7 @@ class FileUploadComponent extends Object{
   var $data = array();
   var $params = array();
   
-  /***************************************************
+  /**
     * Final file is set on move_uploadedFile success.
     * This is the file name of the final file that was uploaded
     * to the uploadDir directory.
@@ -136,7 +137,7 @@ class FileUploadComponent extends Object{
     */
   var $finalFiles = array();
   
-  /***************************************************
+  /**
     * success is set if we have a fileModel and there was a successful save
     * or if we don't have a fileModel and there was a successful file uploaded.
     *
@@ -145,7 +146,7 @@ class FileUploadComponent extends Object{
     */
   var $success = false;
   
-  /**************************************************
+  /**
     * Definitions of errors that could occur during upload
     * 
     * @author Jon Langevin
@@ -162,14 +163,14 @@ class FileUploadComponent extends Object{
     UPLOAD_ERR_EXTENSION => 'File upload stopped by extension.' //Introduced in PHP 5.2.0.
   );
   
-  /***************************************************
+  /**
     * uploadIds is the final database ids saved when files are detected
     * @var array of ids of single or multiple files uploaded
     * @access public
     */
   var $uploadIds = array();
   
-  /***************************************************
+  /**
     * errors holds any errors that occur as string values.
     * this can be access to debug the FileUploadComponent
     *
@@ -178,7 +179,7 @@ class FileUploadComponent extends Object{
     */
   var $errors = array();
   
-  /***************************************************
+  /**
     * Initializes FileUploadComponent for use in the controller
     *
     * @param object $controller A reference to the instantiating controller object
@@ -189,7 +190,8 @@ class FileUploadComponent extends Object{
     $this->data = $controller->data;
     $this->params = $controller->params;
   }
-  /***************************************************
+  
+  /**
     * Main execution method.  Handles file upload automatically upon detection and verification.
     *
     * @param object $controller A reference to the instantiating controller object
@@ -207,7 +209,7 @@ class FileUploadComponent extends Object{
     
   }
   
-  /*************************************************
+  /**
     * removeFile removes a specific file from the uploaded directory
     *
     * @param string $name A reference to the filename to delete from the uploadDirectory
@@ -230,8 +232,8 @@ class FileUploadComponent extends Object{
     }
   }
   
-  /*************************************************
-    * removeFile removes a specific file from the uploaded directory
+  /**
+    * removeFileById removes a specific file from the uploaded directory when given an id.
     *
     * @param string | int $id A reference to the filename to delete from the uploadDirectory
     * @return boolean
@@ -253,7 +255,7 @@ class FileUploadComponent extends Object{
     return $this->removeFile($name);
   }
   
-  /*************************************************
+  /**
     * showErrors itterates through the errors array
     * and returns a concatinated string of errors sepearated by
     * the $sep
@@ -271,7 +273,7 @@ class FileUploadComponent extends Object{
   }
   
   
-  /**************************************************
+  /**
     * _processFile takes the detected uploaded file and saves it to the
     * uploadDir specified, it then sets success to true or false depending
     * on the save success of the model (if there is a model).  If there is no model
@@ -331,26 +333,33 @@ class FileUploadComponent extends Object{
     }
   }
   
-  /***************************************************
-    *
+  /**
+    * process all files that are queued up to be saved to the filesystem or database.
+    * 
+    * @return void
+    * @access public
     */
   function processAllFiles(){
     foreach($this->uploadedFiles as $file){
-      $this->setCurrentFile($file);
+      $this->_setCurrentFile($file);
       if($this->_checkFile() && $this->_checkType()){
         $this->processFile();
       }
     }
   }
   
-  /***************************************************
+  /**
+    * Set's the current file to process.
     *
+    * @access private
+    * @param associative array of file
+    * @return void
     */
-  function setCurrentFile($file){
+  function _setCurrentFile($file){
     $this->currentFile = $file[$this->fileVar];
   }
   
-  /***************************************************
+  /**
     * Returns a reference to the model object specified, and attempts
     * to load it if it is not found.
     *
@@ -379,7 +388,7 @@ class FileUploadComponent extends Object{
 		return $model;
 	}
   
-  /***************************************************
+  /**
     * Adds error messages to the component
     *
     * @param string $text String of error message to save
@@ -392,7 +401,7 @@ class FileUploadComponent extends Object{
     trigger_error($message,E_USER_WARNING);
   }
   
-  /***************************************************
+  /**
     * Checks if the uploaded type is allowed defined in the allowedTypes
     *
     * @return boolean if type is accepted
@@ -408,7 +417,7 @@ class FileUploadComponent extends Object{
     return false;
   }
   
-  /***************************************************
+   /**
      * Checks if there is a file uploaded
      *
      * @return void
@@ -426,7 +435,7 @@ class FileUploadComponent extends Object{
       return false;
     } 
   
-  /***************************************************
+  /**
     * Returns the extension of the uploaded filename.
     *
     * @return string $extension A filename extension
@@ -436,7 +445,7 @@ class FileUploadComponent extends Object{
     return strrchr($this->currentFile['name'],".");
   }
   
-  /***************************************************
+  /**
     * Returns an array of the uploaded file or false if there is not a file
     *
     * @return array|boolean Array of uploaded file, or false if no file uploaded
@@ -474,11 +483,15 @@ class FileUploadComponent extends Object{
     //cleanup array. unset any file in the array that wasn't actually uploaded.
     if($retval){
       foreach($retval as $key => $file){
-        if($file[$this->fileVar]['error'] == UPLOAD_ERR_NO_FILE){
+        if(!empty($file[$this->fileVar]) && !isset($file[$this->fileVar]['error'])){
+          $this->_error("FileUpload::_uploadedFilesArray() error.  Only a filename was detected, not the actual file.  Make sure you have enctype='multipart/form-data' in your form.  Please review documentation.");
+        }
+        if(isset($file[$this->fileVar]['error']) && $file[$this->fileVar]['error'] == UPLOAD_ERR_NO_FILE){
           unset($retval[$key]);
         }
       }
     }
+    
     //spit out an error if a file was detected but nothing is being returned by this method.
     if($this->uploadDetected && $retval === false){
       $this->_error("FileUpload: A file was detected, but was unable to be processed due to a misconfiguration of FileUpload. Current config -- fileModel:'{$this->fileModel}' fileVar:'{$this->fileVar}'");
@@ -487,7 +500,7 @@ class FileUploadComponent extends Object{
     return $retval;
   }
   
-  /***************************************************
+  /**
     * Searches through the $haystack for a $key.
     *
     * @param string $needle String of key to search for in $haystack
