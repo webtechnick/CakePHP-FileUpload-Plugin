@@ -7,7 +7,7 @@
 * @copyright    Copyright 2009, Webtechnick
 * @link         http://www.webtechnick.com
 * @author       Nick Baker
-* @version      3.5
+* @version      3.6
 * @license      MIT
 */
 class FileUploadComponent extends Object{
