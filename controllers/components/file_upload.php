@@ -47,6 +47,17 @@ class FileUploadComponent extends Object{
   var $fileVar = 'file';
   
   /**
+    * massSave is used if you'd like the plugin to handle associative records
+    * along with just the Uploaded data.  By default this is turned off.
+    * Turning this feature on will require you to have your model associations
+    * set correctly in your Upload model.
+    *
+    * @var boolean
+    * @access public
+    */
+  var $massSave = false;
+  
+  /**
     * allowedTypes is the allowed types of files that will be saved
     * to the filesystem.  You can change it at anytime without
     * $this->FileUpload->allowedTypes = array('text/plain',etc...);
@@ -302,24 +313,16 @@ class FileUploadComponent extends Object{
 		}
     
     //Ability to dynamically add other model fields added by Jon Langevin
-    $save_data = array();
-    
-    if($this->fileModel){
-      $save_data = $this->data[$this->fileModel];
-      //Unset uploaded file details, only using our saved data.
-      for($i=0;$i<count($this->uploadedFiles);$i++){
-        unset($save_data[$i]);
-      }
-    }
+    $save_data = $this->__prepareSaveData();
     
     if(move_uploaded_file($this->currentFile['tmp_name'], $target_path)){
       $this->finalFile[] = basename($target_path);
       $this->finalFile = basename($target_path); //backported.  //finalFile is now depreciated
-      $save_data[$this->fields['name']] = $this->finalFile;
-      $save_data[$this->fields['type']] = $this->currentFile['type'];
-      $save_data[$this->fields['size']] = $this->currentFile['size'];
+      $save_data[$this->fileModel][$this->fields['name']] = $this->finalFile;
+      $save_data[$this->fileModel][$this->fields['type']] = $this->currentFile['type'];
+      $save_data[$this->fileModel][$this->fields['size']] = $this->currentFile['size'];
       $model =& $this->getModel();
-      if(!$model || $model->save($save_data)){
+      if(!$model || $model->saveAll($save_data)){
         $this->success = true;
         if($model){
           $this->uploadIds[] = $model->id;
@@ -331,6 +334,34 @@ class FileUploadComponent extends Object{
     else{
       $this->_error('FileUpload::processFile() - Unable to save temp file to file system.');
     }
+  }
+  
+  /** __prepareSaveData is used to help generate the array structure depending
+    * that relys on $this->massSave to decide how to structure the save data for
+    * the upload.
+    *
+    * @access private
+    * @return array of prepared savedata.
+    */
+  function __prepareSaveData(){
+    $retval = array();
+    
+    if($this->fileModel){
+      if($this->massSave){
+        $retval = $this->data;
+        for($i=0;$i<count($this->uploadedFiles);$i++){
+          unset($retval[$this->fileModel][$i]);
+        } 
+      }
+      else {
+        $retval = $this->data[$this->fileModel];
+        for($i=0;$i<count($this->uploadedFiles);$i++){
+          unset($retval[$i]);
+        }
+      }
+    }
+    
+    return $retval;
   }
   
   /**
