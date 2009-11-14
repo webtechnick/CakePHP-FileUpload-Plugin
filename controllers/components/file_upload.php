@@ -387,7 +387,12 @@ class FileUploadComponent extends Object{
     * @return void
     */
   function _setCurrentFile($file){
-    $this->currentFile = $file[$this->fileVar];
+    if($this->fileModel){
+      $this->currentFile = $file[$this->fileVar];
+    }
+    else {
+      $this->currentFile = $file;
+    }
   }
   
   /**
