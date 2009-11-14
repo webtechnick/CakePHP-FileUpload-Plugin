@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 3.6
+VERSION: 3.6.1
 EMAIL: nick@webtechnick.com
 
 INSTALL:
@@ -18,6 +18,7 @@ BAKERY ARTICLE:
 For More documentation visit the bakery @ http://bakery.cakephp.org/articles/view/file-upload-component-w-automagic-model-optional
 
 CHANGELOG:
+   3.6.1 Bug fixes (for non model users)
    3.6: Added massSave associative array save support.
    3.5: Added multi file support. (API changes: $uploadId now depreciated, use $uploadIds[0] instead.  $finalFile now depreciated, use $finalFiles[0] instead.)
    3.0: Converted Component and Helper into a plugin for easy management between projects
