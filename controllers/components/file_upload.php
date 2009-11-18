@@ -7,7 +7,7 @@
 * @copyright    Copyright 2009, Webtechnick
 * @link         http://www.webtechnick.com
 * @author       Nick Baker
-* @version      3.6
+* @version      3.6.2
 * @license      MIT
 */
 class FileUploadComponent extends Object{
@@ -316,7 +316,7 @@ class FileUploadComponent extends Object{
     $save_data = $this->__prepareSaveData();
     
     if(move_uploaded_file($this->currentFile['tmp_name'], $target_path)){
-      $this->finalFile[] = basename($target_path);
+      $this->finalFiles[] = basename($target_path);
       $this->finalFile = basename($target_path); //backported.  //finalFile is now depreciated
       $save_data[$this->fileModel][$this->fields['name']] = $this->finalFile;
       $save_data[$this->fileModel][$this->fields['type']] = $this->currentFile['type'];
