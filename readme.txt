@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 3.6.2
+VERSION: 3.6.3
 EMAIL: nick@webtechnick.com
 
 INSTALL:
@@ -18,6 +18,7 @@ BAKERY ARTICLE:
 For More documentation visit the bakery @ http://bakery.cakephp.org/articles/view/file-upload-component-w-automagic-model-optional
 
 CHANGELOG:
+   3.6.3 Bug fix; assigning multiple columns to upload model key, doesn't test to make sure it's a file (regression fixed).
    3.6.2 Bug fixes, multiple fileupload issue with finalFiles
    3.6.1 Bug fixes (for non model users)
    3.6: Added massSave associative array save support.

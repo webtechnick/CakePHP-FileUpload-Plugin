@@ -7,7 +7,7 @@
 * @copyright    Copyright 2009, Webtechnick
 * @link         http://www.webtechnick.com
 * @author       Nick Baker
-* @version      3.6.2
+* @version      3.6.3
 * @license      MIT
 */
 class FileUploadComponent extends Object{
@@ -302,6 +302,8 @@ class FileUploadComponent extends Object{
       $this->setCurrentFile($this->uploadedFiles[0]);
     }
     
+    debug($this->uploadedFiles);
+    
     $up_dir = WWW_ROOT . $this->uploadDir;
     $target_path = $up_dir . DS . $this->currentFile['name'];
     $temp_path = substr($target_path, 0, strlen($target_path) - strlen($this->_ext())); //temp path without the ext
@@ -519,10 +521,15 @@ class FileUploadComponent extends Object{
     //cleanup array. unset any file in the array that wasn't actually uploaded.
     if($retval){
       foreach($retval as $key => $file){
-        if(!empty($file[$this->fileVar]) && !isset($file[$this->fileVar]['error'])){
-          $this->_error("FileUpload::_uploadedFilesArray() error.  Only a filename was detected, not the actual file.  Make sure you have enctype='multipart/form-data' in your form.  Please review documentation.");
+        if(is_array($file) && isset($file[$this->fileVar])){
+          if(!empty($file[$this->fileVar]) && !isset($file[$this->fileVar]['error'])){
+            $this->_error("FileUpload::_uploadedFilesArray() error.  Only a filename was detected, not the actual file.  Make sure you have enctype='multipart/form-data' in your form.  Please review documentation.");
+          }
+          if(isset($file[$this->fileVar]['error']) && $file[$this->fileVar]['error'] == UPLOAD_ERR_NO_FILE){
+            unset($retval[$key]);
+          }
         }
-        if(isset($file[$this->fileVar]['error']) && $file[$this->fileVar]['error'] == UPLOAD_ERR_NO_FILE){
+        else {
           unset($retval[$key]);
         }
       }
