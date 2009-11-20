@@ -302,8 +302,6 @@ class FileUploadComponent extends Object{
       $this->setCurrentFile($this->uploadedFiles[0]);
     }
     
-    debug($this->uploadedFiles);
-    
     $up_dir = WWW_ROOT . $this->uploadDir;
     $target_path = $up_dir . DS . $this->currentFile['name'];
     $temp_path = substr($target_path, 0, strlen($target_path) - strlen($this->_ext())); //temp path without the ext
