@@ -51,6 +51,8 @@ class FileUploadBehavior extends ModelBehavior {
           $Model->data[$Model->alias][$this->options['fields']['name']] = $fileName;
           $Model->data[$Model->alias][$this->options['fields']['size']] = $file['size'];
           $Model->data[$Model->alias][$this->options['fields']['type']] = $file['type'];
+        } else {
+          return false; // we couldn't save the file, return false
         }
         unset($Model->data[$Model->alias][$this->options['fileVar']]);
       }
