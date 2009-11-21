@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 3.6.3
+VERSION: 4.0
 EMAIL: nick@webtechnick.com
 
 INSTALL:
@@ -14,10 +14,8 @@ http://projects.webtechnick.com/file_upload_plugin
 BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
-BAKERY ARTICLE:  
-For More documentation visit the bakery @ http://bakery.cakephp.org/articles/view/file-upload-component-w-automagic-model-optional
-
 CHANGELOG:
+   4.0: Massive update, refactoring, new behavior, new configuration file.
    3.6.3 Bug fix; assigning multiple columns to upload model key, doesn't test to make sure it's a file (regression fixed).
    3.6.2 Bug fixes, multiple fileupload issue with finalFiles
    3.6.1 Bug fixes (for non model users)
@@ -44,12 +42,12 @@ var $helpers = array('Html', 'Form', 'FileUpload.FileUpload');
 var $components = array('FileUpload.FileUpload');
 ?>
 
-Upon submitting a file the FileUpload Component will automatically search for your uploaded file, verify its of the proper type set by $this->FileUpload->allowedTypes:
+Upon submitting a file the FileUpload Component will automatically search for your uploaded file, verify its of the proper type set by $this->FileUpload->allowedTypes():
 <?php 
 function beforeFilter(){
   parent::beforeFilter();
   //defaults to 'image/jpeg','image/gif','image/png','image/pjpeg','image/x-png'
-  $this->FileUpload->allowedTypes = array('image/jpeg','text/plain'); 
+  $this->FileUpload->allowedTypes(array('image/jpeg','text/plain')); 
 }
 ?>
 
@@ -58,7 +56,7 @@ Then it will attempt to copy the file to your uploads directory set by $this->Fi
 function beforeFilter(){
   parent::beforeFilter();
   //defaults to 'files', will be webroot/files, make sure webroot/files exists and is chmod 777
-  $this->FileUpload->uploadDir = 'files'; 
+  $this->FileUpload->uploadDir('files'); 
 }
 ?>
 
@@ -98,7 +96,7 @@ Default fields are name, type, and size; but you can change that at anytime usin
 function beforeFilter(){
   parent::beforeFilter();
   //fill with associated array of name, type, size to the corresponding column name
-  $this->FileUpload->fields = array('name'=> 'name', 'type' => 'type', 'size' => 'size');
+  $this->FileUpload->fields(array('name'=> 'name', 'type' => 'type', 'size' => 'size'));
 }
 ?>
 
@@ -126,12 +124,12 @@ Uploading Multiple Files *NEW*
 
 =============================== WITHOUT MODEL CONFIGURATION =================================
 
-If you wish to NOT use a model simply set $this->FileUpload->fileModel = null; in a beforeFilter.
+If you wish to NOT use a model simply set $this->FileUpload->fileModel(null); in a beforeFilter.
 <?php 
   //in a controller
   function beforeFilter(){
     parent::beforeFilter();
-    $this->FileUpload->fileModel = null;  //Upload by default.
+    $this->FileUpload->fileModel(null);  //Upload by default.
   }
 ?>
 

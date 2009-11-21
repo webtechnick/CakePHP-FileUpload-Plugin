@@ -1,0 +1,43 @@
+Migration Guide 3.x to 4.0
+
+A lot of new improvements to the FileUploadPlugin with version 4.0.  However there are a few API changes you'll need to be aware of. 
+If you're using the Component feature of your file upload plugin, and you've set some custom configurations you'll need to use the new API.
+
+Version 4.0 comes with a new settings class that handles all the fileUpload settings for every way you use the plugin, as such I've had to change how you access and set these options.
+
+You can access and set your file upload options at any time with by calling the option name and passing in a value or not.
+If you do not pass in a value to the option you'll be returned the option value.
+
+
+
+===== GETTING OPTIONS =====
+OLD WAY:
+$this->FileUpload->fileModel;
+
+NEW WAY:
+$this->FileUpload->fileModel();
+
+===== SETTING OPTIONS =====
+OLD WAY:
+$this->FileUpload->fileModel = null;
+
+NEW WAY:
+$this->FileUpload->fileModel(null);
+
+
+OLD WAY:
+$this->FileUpload->allowedTypes = array('application/pdf');
+
+NEW WAY:
+$this->FileUpload->allowedTypes(array('application/pdf'));
+
+
+OLD WAY:
+$this->FileUpload->allowedTypes[] = 'application/pdf';
+
+NEW WAY:
+$this->FileUpload->allowedTypes(array_merge($this->FileUpload->allowedTypes(), 'application/pdf'));
+
+
+
+As you can see, the direct access to variables in the component are gone, as they are instances of the new settings class and need to be accessed and set accordingly.

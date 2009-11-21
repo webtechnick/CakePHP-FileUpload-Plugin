@@ -19,6 +19,7 @@
   *      $fileUpload->input(array('var' => 'fileVar', 'model' => 'Picture')); //customized input form.
   *      
   */
+App::import('Config', 'FileUpload.file_upload_settings');
 class FileUploadHelper extends AppHelper{
   var $helpers = array('Html', 'Form');
     
@@ -54,14 +55,20 @@ class FileUploadHelper extends AppHelper{
     'resizeThumbOnly' => true //if true, will only resize the image down -- not up past the original's size
   );
   
+  /**
+    * FileUpload Settings set in config/file_upload_settings.php
+    */
+  var $settings = array();
+  
   /************************************************
     * Constructor, initiallizes the FileUpload Component
     * and sets the default options.
     */
   function __construct(){
-    App::import('Component', 'FileUpload.FileUpload');
-    $this->FileUpload = new FileUploadComponent;
-    $this->options['uploadDir'] = $this->FileUpload->uploadDir;
+    $FileUploadSettings = new FileUploadSettings;
+    
+    //setup settings
+    $this->settings = array_merge($FileUploadSettings->defaults, $this->options);
   }
   
   /************************************************************
@@ -107,7 +114,7 @@ class FileUploadHelper extends AppHelper{
     */
   function input($options = array()){
     $options = array_merge(
-      array('var' => $this->FileUpload->fileVar,'model' => $this->FileUpload->fileModel),
+      array('var' => $this->settings['fileVar'],'model' => $this->settings['fileModel']),
       $options
     );
     $configs = $options;
@@ -125,12 +132,15 @@ class FileUploadHelper extends AppHelper{
     * @access protected
     */
   function _getImageById(){
+    App::import('Component', 'FileUpload.FileUpload');
+    $this->FileUpload = new FileUploadComponent;
+    
     $id = $this->fileName;
     $Model =& $this->FileUpload->getModel();
     $Model->recursive = -1;
     $upload = $Model->findById($id);
     if(!empty($upload)){
-      $this->fileName = $upload[$this->FileUpload->fileModel][$this->FileUpload->fields['name']];
+      $this->fileName = $upload[$this->settings['fileModel']][$this->settings['fields']['name']];
       return $this->_getImageByName();
     }
     else{
