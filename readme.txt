@@ -35,6 +35,61 @@ CHANGELOG:
 
 =============================== SETUP AND BASIC CONFIGURATIONS ============================
 
+There are two ways to setup the this plugin.  Number one, you can use the Behavior + Helper method.
+by attaching the FileUpload.FileUpload behavior to a model of your choice any file uploaded while saving that
+model will move the file to its specified area (webroot/files).  All the file uploading will happen for you
+automatically, including multiple file uploads and associations.
+
+
+===================== BEHAVIOR CONFIGURATION ==========================
+Simply attach the FileUpload.FileUpload behavior to the model of your choice.
+
+<?php
+class Upload extends AppModel {
+  var $name = 'Upload';
+  var $actsAs = array('FileUpload.FileUpload');
+}
+?>
+
+To set options in to your behavior like change the upload directory or the fileVar you'd like to use
+for automatic file uploading simply pass them into your attachment like so:
+
+<?php
+class Upload extends AppModel {
+  var $name = 'Upload';
+  var $actsAs = array(
+        'FileUpload.FileUpload' => array(
+          'uploadDir' => 'files',
+          'fields' => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
+          'allowedTypes' => array('application/pdf')
+        )
+      );
+}
+?>
+
+Now with your upload model set, you'll be able to upload files and save to your database even through associations in other models.
+Example:
+
+Assuming an Application->hasMany->Uploads you could do the following:
+<?php
+  echo $form->create('Application', array('type' => 'file'));
+  echo $form->input('Application.name');
+  echo $form->input('Upload.0.file', array('type' => 'file'));
+  echo $form->input('Upload.1.file', array('type' => 'file'));
+  echo $form->end('Save Application and Two Uploads');
+?>
+
+The Behavior method is by far the easiet and most flexible way to get up and rolling with file uploads.
+
+
+===================== COMPONENT CONFIGURATION ==========================
+The second options is to use the Component + Helper method.
+Including with this plugin is another method that requires a component. The advantage of using a
+component is a model is not required for file uploading.  If you do not need a database, and you 
+simply want to upload data to your server quickly and easily simply skip to the WITHOUT MODEL CONFIGURATION
+section of this readme.
+
+
 You'll need to add the FileUpload.FileUpload in both the components and helpers array
 
 <?php
