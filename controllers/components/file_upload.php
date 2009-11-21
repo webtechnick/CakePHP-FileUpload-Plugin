@@ -7,7 +7,7 @@
 * @copyright    Copyright 2009, Webtechnick
 * @link         http://www.webtechnick.com
 * @author       Nick Baker
-* @version      4.0
+* @version      4.0.1
 * @license      MIT
 */
 App::import('Vendor', 'FileUpload.uploader');
