@@ -73,6 +73,7 @@ class Uploader {
     
     //check if we have a file and if we allow the type, return false otherwise.
     if(!$this->checkFile() || !$this->checkType()){
+      //debug($this);
       return false;
     }
     

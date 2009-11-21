@@ -127,12 +127,15 @@ class FileUploadComponent extends Object{
     */
   function attr($name, $values = null){
     if(key_exists($name, $this->options)){
-      if($values){
+      if(func_num_args() > 1){
         $this->options[$name] = $values;
       }
       else {
         return $this->options[$name];
       }
+    }
+    else {
+      $this->_error("Unknown option: $name");
     }
   }
 
@@ -268,7 +271,7 @@ class FileUploadComponent extends Object{
     $save_data = $this->__prepareSaveData();
     
     $this->Uploader->file = $this->currentFile;
-    if($finalFile = $this->Uploader->processFile()){  
+    if($finalFile = $this->Uploader->processFile()){
       $this->finalFiles[] = $finalFile;
       $this->finalFile = $finalFile; //backported.  //finalFile is now depreciated
       $save_data[$this->options['fileModel']][$this->options['fields']['name']] = $this->finalFile;
@@ -299,6 +302,10 @@ class FileUploadComponent extends Object{
       }
     }
     else {
+      //add uploader errors to component errors list
+      foreach($this->Uploader->errors as $error){
+        $this->errors[] = $error;
+      }
       $this->_error('FileUpload::processFile() - Unable to save temp file to file system.');
     }
   }
@@ -333,9 +340,7 @@ class FileUploadComponent extends Object{
     foreach($this->uploadedFiles as $file){
       $this->_setCurrentFile($file);
       $this->Uploader->file = $file[$this->options['fileVar']];
-      if($this->Uploader->checkFile() && $this->Uploader->checkType()){
-        $this->processFile();
-      }
+      $this->processFile();
     }
   }
   
