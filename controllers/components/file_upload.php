@@ -195,7 +195,7 @@ class FileUploadComponent extends Object{
       return false;
     }
     
-    $up_dir = WWW_ROOT . $this->options['fileVar'];
+    $up_dir = WWW_ROOT . $this->options['uploadDir'];
     $target_path = $up_dir . DS . $name;
     
     //delete main image -- $name
