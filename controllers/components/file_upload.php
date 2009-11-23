@@ -436,7 +436,7 @@ class FileUploadComponent extends Object{
         $retval = false;
       }
     }
-        
+            
     //cleanup array. unset any file in the array that wasn't actually uploaded.
     if($retval){
       foreach($retval as $key => $file){
@@ -448,12 +448,11 @@ class FileUploadComponent extends Object{
             unset($retval[$key]);
           }
         }
-        else {
+        elseif($this->options['fileModel']) {
           unset($retval[$key]);
         }
       }
     }
-    
     
     //spit out an error if a file was detected but nothing is being returned by this method.
     if($this->uploadDetected && $retval === false){
