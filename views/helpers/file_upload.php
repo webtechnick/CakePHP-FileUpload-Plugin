@@ -182,7 +182,7 @@ class FileUploadHelper extends AppHelper{
     * @return String upload path of all files
     */
   function _getUploadPath(){
-    return $this->options['uploadDir'] . DS . $this->fileName;
+    return $this->settings['uploadDir'] . DS . $this->fileName;
   }
   
   /**************************************************
