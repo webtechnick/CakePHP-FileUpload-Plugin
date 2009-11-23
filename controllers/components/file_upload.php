@@ -412,7 +412,7 @@ class FileUploadComponent extends Object{
     $retval = array();
     if($this->options['fileModel']){ //Model
       if(isset($this->data[$this->options['fileModel']][$this->options['fileVar']])) {
-        $retval[] = $this->data[$this->options['fileModel']][$this->options['fileVar']];
+        $retval[][$this->options['fileVar']] = $this->data[$this->options['fileModel']][$this->options['fileVar']];
       }
       elseif(isset($this->data[$this->options['fileModel']][0][$this->options['fileVar']])){
         $retval = $this->data[$this->options['fileModel']];
@@ -423,7 +423,7 @@ class FileUploadComponent extends Object{
     }
     else { // No model
       if(isset($this->params['form'][$this->options['fileVar']])){
-        $retval[] = $this->params['form'][$this->options['fileVar']];
+        $retval[][$this->options['fileVar']] = $this->params['form'][$this->options['fileVar']];
       }
       elseif($this->data[$this->options['fileVar']][0]){ //syntax for multiple files without a model is data[file][0]..data[file][1]..data[file][n]
         $retval = $this->data[$this->options['fileVar']];
@@ -436,7 +436,7 @@ class FileUploadComponent extends Object{
         $retval = false;
       }
     }
-    
+        
     //cleanup array. unset any file in the array that wasn't actually uploaded.
     if($retval){
       foreach($retval as $key => $file){
@@ -448,7 +448,7 @@ class FileUploadComponent extends Object{
             unset($retval[$key]);
           }
         }
-        elseif($this->options['fileModel']) {
+        else {
           unset($retval[$key]);
         }
       }
