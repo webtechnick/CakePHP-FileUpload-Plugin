@@ -7,7 +7,7 @@
 * @copyright    Copyright 2009, Webtechnick
 * @link         http://www.webtechnick.com
 * @author       Nick Baker
-* @version      4.0.1
+* @version      4.0.2
 * @license      MIT
 */
 App::import('Vendor', 'FileUpload.uploader');
@@ -339,7 +339,7 @@ class FileUploadComponent extends Object{
   function processAllFiles(){
     foreach($this->uploadedFiles as $file){
       $this->_setCurrentFile($file);
-      $this->Uploader->file = $file[$this->options['fileVar']];
+      $this->Uploader->file = $this->options['fileModel'] ? $file[$this->options['fileVar']] : $file;
       $this->processFile();
     }
   }
@@ -448,11 +448,12 @@ class FileUploadComponent extends Object{
             unset($retval[$key]);
           }
         }
-        else {
+        elseif($this->options['fileModel']) {
           unset($retval[$key]);
         }
       }
     }
+    
     
     //spit out an error if a file was detected but nothing is being returned by this method.
     if($this->uploadDetected && $retval === false){

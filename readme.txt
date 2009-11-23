@@ -15,6 +15,7 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+   4.0.2: Bug fix, uploading non-model files now returns proper array of files to be uploaded.
    4.0.1: Bug fix, setting false values into the global settings now works again, errors in uploader translate to component errors.
    4.0: Massive update, refactoring, new behavior, new configuration file.
    3.6.3 Bug fix; assigning multiple columns to upload model key, doesn't test to make sure it's a file (regression fixed).
