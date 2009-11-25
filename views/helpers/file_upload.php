@@ -4,7 +4,7 @@
   * This helper REQUIRES the FileUploadComponent.
   *
   * @author: Nick Baker
-  * @version: 3.5
+  * @version: 4.0.3
   * @email: nick@webtechnick.com
   * @link: http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
   * @svn: svn checkout http://svn2.xp-dev.com/svn/nurvzy-file-upload-plugin file_upload

@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 4.0.1
+VERSION: 4.0.3
 EMAIL: nick@webtechnick.com
 
 INSTALL:
@@ -15,6 +15,7 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+   4.0.3: Bug fix, using wrong option in removeFile method.
    4.0.2: Bug fix, uploading non-model files now returns proper array of files to be uploaded.
    4.0.1: Bug fix, setting false values into the global settings now works again, errors in uploader translate to component errors.
    4.0: Massive update, refactoring, new behavior, new configuration file.
