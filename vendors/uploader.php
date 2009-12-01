@@ -143,7 +143,7 @@ class Uploader {
   function checkType($file = null){
     $this->setFile($file);
     foreach($this->options['allowedTypes'] as $value){
-      if(strtolower($this->file['type']) == strtolower($value)){
+      if(strtolower($this->file['type']) == strtolower($value) || $value == '*'){
         return true;
       }
     }
