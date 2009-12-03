@@ -7,7 +7,7 @@
 * @copyright    Copyright 2009, Webtechnick
 * @link         http://www.webtechnick.com
 * @author       Nick Baker
-* @version      4.0.3
+* @version      4.0.4
 * @license      MIT
 */
 App::import('Vendor', 'FileUpload.uploader');
@@ -425,7 +425,7 @@ class FileUploadComponent extends Object{
       if(isset($this->params['form'][$this->options['fileVar']])){
         $retval[][$this->options['fileVar']] = $this->params['form'][$this->options['fileVar']];
       }
-      elseif($this->data[$this->options['fileVar']][0]){ //syntax for multiple files without a model is data[file][0]..data[file][1]..data[file][n]
+      elseif(isset($this->data[$this->options['fileVar']][0])){ //syntax for multiple files without a model is data[file][0]..data[file][1]..data[file][n]
         $retval = $this->data[$this->options['fileVar']];
       }
       elseif(isset($this->params['form'][$this->options['fileVar']][0])) {
