@@ -245,7 +245,7 @@ class FileUploadHelper extends AppHelper{
     */
   function _htmlImage(){
     if(!$this->_isOutsideSource() && $this->options['autoResize'] && $this->options['width'] > 0){
-      if(isset($this->newImage) && $this->newImage->imgWidth < $this->options['width']){
+      if(isset($this->newImage) && $this->newImage->imgWidth && $this->newImage->imgWidth < $this->options['width']){
         $image = $this->_getImagePath();
       }
       else {
