@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 4.0.4
+VERSION: 4.1.0
 EMAIL: nick@webtechnick.com
 
 INSTALL:
@@ -15,6 +15,7 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+   4.1.0: Added validation errors for the behavior.  If an error is accurded durring an upload a validation error is thrown and presented to the user.
    4.0.4: Bug fix, Undefined index notice within same controller on different form without an upload at all.
    4.0.3: Bug fix, using wrong option in removeFile method.
    4.0.2: Bug fix, uploading non-model files now returns proper array of files to be uploaded.

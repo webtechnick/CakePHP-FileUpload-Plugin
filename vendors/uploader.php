@@ -73,7 +73,6 @@ class Uploader {
     
     //check if we have a file and if we allow the type, return false otherwise.
     if(!$this->checkFile() || !$this->checkType()){
-      //debug($this);
       return false;
     }
     
@@ -93,7 +92,7 @@ class Uploader {
       return $this->finalFile;
     }
     else{
-      $this->_error('Uploader::processFile() - Unable to save temp file to file system.');
+      $this->_error('Unable to save temp file to file system.');
       return false;
     }
   }
@@ -130,7 +129,6 @@ class Uploader {
   function _error($text){
     $message = __($text,true);
     $this->errors[] = $message;
-    trigger_error($message,E_USER_WARNING);
   }
   
   /**
@@ -147,7 +145,7 @@ class Uploader {
         return true;
       }
     }
-    $this->_error("Uploader::_checkType() {$this->file['type']} is not in the allowedTypes array.");
+    $this->_error("{$this->file['type']} is not an allowed type.");
     return false;
   }
   
@@ -203,6 +201,30 @@ class Uploader {
   function hasUpload($file = null){
     $this->setFile($file);
     return ($this->_multiArrayKeyExists("tmp_name", $this->file));
+  }
+  
+  /**
+    * @return boolean true if errors were detected.
+    */
+  function hasErrors(){
+    return count($this->errors);
+  }
+  
+  /**
+    * showErrors itterates through the errors array
+    * and returns a concatinated string of errors sepearated by
+    * the $sep
+    *
+    * @param string $sep A seperated defaults to <br />
+    * @return string
+    * @access public
+    */
+  function showErrors($sep = " "){
+    $retval = "";
+    foreach($this->errors as $error){
+      $retval .= "$error $sep";
+    }
+    return $retval;
   }
   
   /**

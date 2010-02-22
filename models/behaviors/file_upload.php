@@ -60,8 +60,25 @@ class FileUploadBehavior extends ModelBehavior {
         unset($Model->data[$Model->alias]);
       }
     }
-    
     return true;
+  }
+  
+  /**
+    * Updates validation errors if there was an error uploading the file.
+    * presents the user the errors.
+    */
+  function beforeValidate(&$Model){
+    $file = $Model->data[$Model->alias][$this->options['fileVar']];
+    $this->Uploader->file = $file;
+    if($this->Uploader->hasUpload()){
+      if($this->Uploader->checkFile() && $this->Uploader->checkType()){
+        $Model->beforeValidate();
+      }
+      else {
+        $Model->validationErrors[$this->options['fileVar']] = $this->Uploader->showErrors();
+      }
+    }
+    return $Model->beforeValidate();
   }
   
   /**
