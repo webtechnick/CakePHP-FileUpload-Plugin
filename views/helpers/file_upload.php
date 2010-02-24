@@ -4,7 +4,7 @@
   * This helper REQUIRES the FileUploadComponent.
   *
   * @author: Nick Baker
-  * @version: 4.0.3
+  * @version: 4.1.1
   * @email: nick@webtechnick.com
   * @link: http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
   * @svn: svn checkout http://svn2.xp-dev.com/svn/nurvzy-file-upload-plugin file_upload
@@ -172,7 +172,7 @@ class FileUploadHelper extends AppHelper{
       return $this->fileName;
     }
     else {
-      return DS . $this->_getUploadPath();
+      return '/' . $this->_getUploadPath();
     }
   }
   
@@ -182,7 +182,7 @@ class FileUploadHelper extends AppHelper{
     * @return String upload path of all files
     */
   function _getUploadPath(){
-    return $this->settings['uploadDir'] . DS . $this->fileName;
+    return $this->settings['uploadDir'] . '/' . $this->fileName;
   }
   
   /**************************************************
@@ -219,7 +219,7 @@ class FileUploadHelper extends AppHelper{
     $file_name = basename($file_name_or_path);
     $path = substr($file_name_or_path, 0, strlen($file_name_or_path) - strlen($file_name));
     $temp_path = substr($file_name,0,strlen($file_name) - strlen($this->_getExt())) . "x" . $this->options['width'] . $this->_getExt();
-    $full_path = (strlen($this->options['resizedDir']) > 0) ? $path . $this->options['resizedDir'] . DS . $temp_path : $path . $temp_path;
+    $full_path = (strlen($this->options['resizedDir']) > 0) ? $path . $this->options['resizedDir'] . '/' . $temp_path : $path . $temp_path;
     return $full_path;
   }
   
