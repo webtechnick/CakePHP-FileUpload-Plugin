@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 4.1.1
+VERSION: 4.1.2
 EMAIL: nick@webtechnick.com
 
 INSTALL:
@@ -15,6 +15,7 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+   4.1.2: Fixed a regression,  passing in custom settings to the helper now changes those settings.
    4.1.1: Bug fix displaying correct image path for Windows Servers.
    4.1.0: Added validation errors for the behavior.  If an error is accurded durring an upload a validation error is thrown and presented to the user.
    4.0.4: Bug fix, Undefined index notice within same controller on different form without an upload at all.
