@@ -66,10 +66,30 @@ class FileUploadHelper extends AppHelper{
     * and sets the default options.
     */
   function __construct(){
-    $FileUploadSettings = new FileUploadSettings;
+    $this->FileUploadSettings = new FileUploadSettings;
     
     //setup settings
-    $this->settings = array_merge($FileUploadSettings->defaults, $this->options);
+    $this->settings = array_merge($this->FileUploadSettings->defaults, $this->options);
+  }
+  
+  /**
+    * Reset the helper to its initial state
+    * @access public
+    * @return void
+    */
+  function reset(){
+    $this->fileName = null;
+    $this->options = array(
+      'width' => 0, 
+      'resizedDir' => 'resized', 
+      'imagePathOnly' => false, 
+      'autoResize' => true, 
+      'resizeThumbOnly' => true
+    );
+    
+    //setup settings
+    $this->settings = array_merge($this->FileUploadSettings->defaults, $this->options);
+    unset($this->newImage);
   }
   
   /**
@@ -139,6 +159,7 @@ class FileUploadHelper extends AppHelper{
     $this->FileUpload = new FileUploadComponent;
     
     $id = $this->fileName;
+    $this->FileUpload->options['fileModel'] = $this->settings['fileModel'];
     $Model =& $this->FileUpload->getModel();
     $Model->recursive = -1;
     $upload = $Model->findById($id);
