@@ -127,8 +127,7 @@ class Uploader {
   * @access protected
   */
   function _error($text){
-    $message = __($text,true);
-    $this->errors[] = $message;
+    $this->errors[] = __($text,true);
   }
   
   /**

@@ -5,13 +5,14 @@
   * Example Usage:
   *  var $actsAs = array(
   *     'FileUpload.FileUpload' => array(
-  *       'uploadDir' => 'files',
-  *       'fields' => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
-  *       'allowedTypes' => array('application/pdf')
+  *       'uploadDir'    => 'files',
+  *       'fields'       => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
+  *       'allowedTypes' => array('application/pdf'),
+  *       'requilred'    => false,
   *     )
   *    )
   *
-  * @version: 4.0.3
+  * @version: 4.2.0
   * @author: Nick Baker
   * @link: http://www.webtechnick.com
   */
@@ -79,6 +80,9 @@ class FileUploadBehavior extends ModelBehavior {
           $Model->validationErrors[$this->options['fileVar']] = $this->Uploader->showErrors();
         }
       }
+    }
+    elseif(isset($this->options['required']) && $this->options['required']){
+      $Model->validationErrors[$this->options['fileVar']] = 'No File';
     }
     return $Model->beforeValidate();
   }

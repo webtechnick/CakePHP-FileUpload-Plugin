@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 4.1.2
+VERSION: 4.2.0
 EMAIL: nick@webtechnick.com
 
 INSTALL:
@@ -15,6 +15,7 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+   4.2.0: Added a new 'required' key in Behavior settings that would produce a validation error if a file wasn't uploaded.
    4.1.2: Fixed a regression,  passing in custom settings to the helper now changes those settings.
    4.1.1: Bug fix displaying correct image path for Windows Servers.
    4.1.0: Added validation errors for the behavior.  If an error is accurded durring an upload a validation error is thrown and presented to the user.
@@ -68,7 +69,8 @@ class Upload extends AppModel {
         'FileUpload.FileUpload' => array(
           'uploadDir' => 'files',
           'fields' => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
-          'allowedTypes' => array('application/pdf')
+          'allowedTypes' => array('application/pdf'),
+          'required' => false //default is false, if true a validation error would occur if a file wsan't uploaded.
         )
       );
 }
