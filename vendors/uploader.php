@@ -3,7 +3,7 @@
   * Uploader class handles a single file to be uploaded to the file system
   * 
   * @author: Nick Baker
-  * @verion: 4.0.3
+  * @verion: 4.3.0
   * @link: http://www.webtechnick.com 
   */
 class Uploader {
@@ -72,7 +72,7 @@ class Uploader {
     $this->setFile($file);
     
     //check if we have a file and if we allow the type, return false otherwise.
-    if(!$this->checkFile() || !$this->checkType()){
+    if(!$this->checkFile() || !$this->checkType() || !$this->checkSize()){
       return false;
     }
     
@@ -165,6 +165,29 @@ class Uploader {
         $this->_error($this->uploadErrors[$this->file['error']]);
       }
     }        
+    return false;
+  }
+  
+  /**
+    * Checks if the file uploaded exceeds the maxFileSize setting (if there is onw)
+    *
+    * @return boolean
+    * @access public
+    * @param file array of uploaded file (optional)
+    */
+  function checkSize($file = null){
+    $this->setFile($file);
+    if($this->hasUpload() && $this->file){
+      if(!$this->options['maxFileSize']){ //We don't want to test maxFileSize
+        return true;
+      }
+      elseif($this->options['maxFileSize'] && $this->file['size'] < $this->options['maxFileSize']){
+        return true;
+      }
+      else {
+        $this->_error("File exceeds {$this->options['maxFileSize']} byte limit.");
+      }
+    }
     return false;
   }
   

@@ -67,6 +67,12 @@ class FileUploadSettings {
     'allowedTypes' => array('image/jpeg','image/gif','image/png','image/pjpeg','image/x-png'),
     
     /**
+      * Max file size in bytes
+      * @var mixed false ignore maxFileSize (php.ini limit). int bytes of max file size
+      */
+    'maxFileSize' => false,
+      
+    /**
       * Component and Behavior Setting.
       * 
       * fields are the fields relating to the database columns

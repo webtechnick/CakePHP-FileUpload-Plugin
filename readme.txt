@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 4.2.0
+VERSION: 4.3.0
 EMAIL: nick@webtechnick.com
 
 INSTALL:
@@ -15,31 +15,32 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
-   4.2.0: Added a new 'required' key in Behavior settings that would produce a validation error if a file wasn't uploaded.
-   4.1.2: Fixed a regression,  passing in custom settings to the helper now changes those settings.
-   4.1.1: Bug fix displaying correct image path for Windows Servers.
-   4.1.0: Added validation errors for the behavior.  If an error is accurded durring an upload a validation error is thrown and presented to the user.
-   4.0.4: Bug fix, Undefined index notice within same controller on different form without an upload at all.
-   4.0.3: Bug fix, using wrong option in removeFile method.
-   4.0.2: Bug fix, uploading non-model files now returns proper array of files to be uploaded.
-   4.0.1: Bug fix, setting false values into the global settings now works again, errors in uploader translate to component errors.
-   4.0: Massive update, refactoring, new behavior, new configuration file.
-   3.6.3 Bug fix; assigning multiple columns to upload model key, doesn't test to make sure it's a file (regression fixed).
-   3.6.2 Bug fixes, multiple fileupload issue with finalFiles
-   3.6.1 Bug fixes (for non model users)
-   3.6: Added massSave associative array save support.
-   3.5: Added multi file support. (API changes: $uploadId now depreciated, use $uploadIds[0] instead.  $finalFile now depreciated, use $finalFiles[0] instead.)
-   3.0: Converted Component and Helper into a plugin for easy management between projects
-   2.0.1: Bug Fixes
-   2.0: Release of FileUploadHelper
-   1.7: Added detailed errors to FileUploadComponent
-   1.6: Bug Fixes
-   1.5: Bug Fixes
-   1.4: Added toggle to allow for auto processFile or not. 
-   1.3: Bug Fixes
-   1.2: Bug Fixes
-   1.1: Converted to cakePHP naming conventions and standards
-   1.0: Initial Release
+  4.3.0: Added a new 'maxFileSize' validation key.
+  4.2.0: Added a new 'required' key in Behavior settings that would produce a validation error if a file wasn't uploaded.
+  4.1.2: Fixed a regression,  passing in custom settings to the helper now changes those settings.
+  4.1.1: Bug fix displaying correct image path for Windows Servers.
+  4.1.0: Added validation errors for the behavior.  If an error is accurded durring an upload a validation error is thrown and presented to the user.
+  4.0.4: Bug fix, Undefined index notice within same controller on different form without an upload at all.
+  4.0.3: Bug fix, using wrong option in removeFile method.
+  4.0.2: Bug fix, uploading non-model files now returns proper array of files to be uploaded.
+  4.0.1: Bug fix, setting false values into the global settings now works again, errors in uploader translate to component errors.
+  4.0: Massive update, refactoring, new behavior, new configuration file.
+  3.6.3 Bug fix; assigning multiple columns to upload model key, doesn't test to make sure it's a file (regression fixed).
+  3.6.2 Bug fixes, multiple fileupload issue with finalFiles
+  3.6.1 Bug fixes (for non model users)
+  3.6: Added massSave associative array save support.
+  3.5: Added multi file support. (API changes: $uploadId now depreciated, use $uploadIds[0] instead.  $finalFile now depreciated, use $finalFiles[0] instead.)
+  3.0: Converted Component and Helper into a plugin for easy management between projects
+  2.0.1: Bug Fixes
+  2.0: Release of FileUploadHelper
+  1.7: Added detailed errors to FileUploadComponent
+  1.6: Bug Fixes
+  1.5: Bug Fixes
+  1.4: Added toggle to allow for auto processFile or not. 
+  1.3: Bug Fixes
+  1.2: Bug Fixes
+  1.1: Converted to cakePHP naming conventions and standards
+  1.0: Initial Release
 
 =============================== SETUP AND BASIC CONFIGURATIONS ============================
 
@@ -70,7 +71,8 @@ class Upload extends AppModel {
           'uploadDir' => 'files',
           'fields' => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
           'allowedTypes' => array('application/pdf'),
-          'required' => false //default is false, if true a validation error would occur if a file wsan't uploaded.
+          'required' => false, //default is false, if true a validation error would occur if a file wsan't uploaded.
+          'maxFileSize' => '10000' //bytes OR false to turn off maxFileSize (default false)
         )
       );
 }

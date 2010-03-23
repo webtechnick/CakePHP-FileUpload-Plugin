@@ -12,7 +12,7 @@
   *     )
   *    )
   *
-  * @version: 4.2.0
+  * @version: 4.3.0
   * @author: Nick Baker
   * @link: http://www.webtechnick.com
   */
@@ -61,7 +61,7 @@ class FileUploadBehavior extends ModelBehavior {
         unset($Model->data[$Model->alias]);
       }
     }
-    return true;
+    return $Model->beforeSave();
   }
   
   /**
@@ -73,7 +73,7 @@ class FileUploadBehavior extends ModelBehavior {
       $file = $Model->data[$Model->alias][$this->options['fileVar']];
       $this->Uploader->file = $file;
       if($this->Uploader->hasUpload()){
-        if($this->Uploader->checkFile() && $this->Uploader->checkType()){
+        if($this->Uploader->checkFile() && $this->Uploader->checkType() && $this->Uploader->checkSize()){
           $Model->beforeValidate();
         }
         else {
