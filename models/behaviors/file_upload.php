@@ -21,7 +21,7 @@
   *
   *
   * @note: Please review the plugins/file_upload/config/file_upload_settings.php file for details on each setting.
-  * @version: since 4.4.0
+  * @version: since 5.0.0
   * @author: Nick Baker
   * @link: http://www.webtechnick.com
   */

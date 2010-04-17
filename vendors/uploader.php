@@ -3,7 +3,7 @@
   * Uploader class handles a single file to be uploaded to the file system
   * 
   * @author: Nick Baker
-  * @version: since 4.4.0
+  * @version: since 5.0.0
   * @link: http://www.webtechnick.com 
   */
 class Uploader {

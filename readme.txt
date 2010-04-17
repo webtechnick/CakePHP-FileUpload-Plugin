@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 4.3.0
+VERSION: 5.0.0
 EMAIL: nick@webtechnick.com
 
 INSTALL:
@@ -15,6 +15,7 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+  5.0.0: Major release tag
   4.4.0: Added new fileName maniupluation callbacks and settings.
   4.3.0: Added a new 'maxFileSize' validation key.
   4.2.0: Added a new 'required' key in Behavior settings that would produce a validation error if a file wasn't uploaded.
