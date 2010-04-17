@@ -3,16 +3,25 @@
   * Behavior for file uploads
   * 
   * Example Usage:
-  *  var $actsAs = array(
+  *
+  * @example 
+  *   var $actsAs = array('FileUpload.FileUpload');
+  *
+  * @example 
+  *   var $actsAs = array(
   *     'FileUpload.FileUpload' => array(
   *       'uploadDir'    => 'files',
   *       'fields'       => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
   *       'allowedTypes' => array('application/pdf'),
-  *       'requilred'    => false,
+  *       'required'    => false,
+  *       'unique' => false //filenames will overwrite existing files of the same name. (default true)
+  *       'fileNameFunction' => 'sha1' //execute the Sha1 function on a filename before saving it (default false)
   *     )
   *    )
   *
-  * @version: 4.3.0
+  *
+  * @note: Please review the plugins/file_upload/config/file_upload_settings.php file for details on each setting.
+  * @version: since 4.4.0
   * @author: Nick Baker
   * @link: http://www.webtechnick.com
   */
@@ -25,6 +34,9 @@ class FileUploadBehavior extends ModelBehavior {
     */
   var $Uploader = null;
   
+  /**
+    * Setup the behavior
+    */
   function setUp(&$Model, $options = array()){
     $FileUploadSettings = new FileUploadSettings;
     if(!is_array($options)){
@@ -34,6 +46,7 @@ class FileUploadBehavior extends ModelBehavior {
         
     $uploader_settings = $this->options;
     $uploader_settings['uploadDir'] = WWW_ROOT . $uploader_settings['uploadDir'];
+    $uploader_settings['fileModel'] = $Model->alias;
     $this->Uploader = new Uploader($uploader_settings);
   }
  
@@ -95,7 +108,7 @@ class FileUploadBehavior extends ModelBehavior {
     $data = $Model->read();
     
     $this->Uploader->removeFile($data[$Model->alias][$this->options['fields']['name']]);
-    return true;
+    return $Model->beforeDelete($cascade);
   }
   
 }

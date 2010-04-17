@@ -15,6 +15,7 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+  4.4.0: Added new fileName maniupluation callbacks and settings.
   4.3.0: Added a new 'maxFileSize' validation key.
   4.2.0: Added a new 'required' key in Behavior settings that would produce a validation error if a file wasn't uploaded.
   4.1.2: Fixed a regression,  passing in custom settings to the helper now changes those settings.
@@ -50,7 +51,7 @@ model will move the file to its specified area (webroot/files).  All the file up
 automatically, including multiple file uploads and associations.
 
 
-===================== BEHAVIOR CONFIGURATION ==========================
+===================== BEHAVIOR CONFIGURATION (RECOMMENDED) ==========================
 Simply attach the FileUpload.FileUpload behavior to the model of your choice.
 
 <?php
@@ -72,11 +73,15 @@ class Upload extends AppModel {
           'fields' => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
           'allowedTypes' => array('application/pdf'),
           'required' => false, //default is false, if true a validation error would occur if a file wsan't uploaded.
-          'maxFileSize' => '10000' //bytes OR false to turn off maxFileSize (default false)
+          'maxFileSize' => '10000', //bytes OR false to turn off maxFileSize (default false)
+          'unique' => false //filenames will overwrite existing files of the same name. (default true)
+          'fileNameFunction' => 'sha1' //execute the Sha1 function on a filename before saving it (default false)
         )
       );
 }
 ?>
+
+NOTE: Please review the FileUpload/config/file_upload_settings.php for details on each setting.
 
 Now with your upload model set, you'll be able to upload files and save to your database even through associations in other models.
 Example:
@@ -93,8 +98,11 @@ Assuming an Application->hasMany->Uploads you could do the following:
 The Behavior method is by far the easiet and most flexible way to get up and rolling with file uploads.
 
 
-===================== COMPONENT CONFIGURATION ==========================
+===================== COMPONENT CONFIGURATION (NOT RECOMMENDED) ==========================
 The second options is to use the Component + Helper method.
+
+NOTE: This not the recommended way.  I do not recommend using the comopnent unless you do *not* require a model.
+
 Including with this plugin is another method that requires a component. The advantage of using a
 component is a model is not required for file uploading.  If you do not need a database, and you 
 simply want to upload data to your server quickly and easily simply skip to the WITHOUT MODEL CONFIGURATION

@@ -3,7 +3,7 @@
   * Uploader class handles a single file to be uploaded to the file system
   * 
   * @author: Nick Baker
-  * @verion: 4.3.0
+  * @version: since 4.4.0
   * @link: http://www.webtechnick.com 
   */
 class Uploader {
@@ -60,6 +60,56 @@ class Uploader {
   }
   
   /**
+    * Preform requested callbacks on the filename.
+    *
+    * @var string chosen filename
+    * @return string of resulting filename
+    * @access private
+    */
+  function __handleFileNameCallback($fileName){  
+    if($this->options['fileNameFunction']){
+      if($this->options['fileModel']){
+        $Model = ClassRegistry::init($this->options['fileModel']);
+        if(method_exists($Model, $this->options['fileNameFunction'])){
+          $fileName = $Model->{$this->options['fileNameFunction']}($fileName);
+        }
+        elseif(function_exists($this->options['fileNameFunction'])){
+          $fileName = call_user_func($this->options['fileNameFunction'], $fileName);
+        }
+      }
+      else {
+        if(function_exists($this->options['fileNameFunction'])){
+          $fileName = call_user_func($this->options['fileNameFunction'], $fileName);
+        }
+      }
+      
+      if(!$fileName){
+        $this->_error('No filename resulting after parsing. Function: ' . $this->options['fileNameFunction']);
+      }
+    }
+    return $fileName;
+  }
+  
+  /**
+    * Preform requested target patch checks depending on the unique setting
+    * 
+    * @var string chosen filename target_path
+    * @return string of resulting target_path
+    * @access private
+    */
+  function __handleUnique($target_path){
+    if($this->options['unique']){
+      $temp_path = substr($target_path, 0, strlen($target_path) - strlen($this->_ext())); //temp path without the ext
+      $i=1;
+      while(file_exists($target_path)){
+        $target_path = $temp_path . "-" . $i . $this->_ext();
+        $i++;
+      }
+		}
+    return $target_path;
+  }
+  
+  /**
     * processFile will take a file, or use the current file given to it
     * and attempt to save the file to the file system.
     * processFile will check to make sure the file is there, and its type is allowed to be saved.
@@ -78,13 +128,9 @@ class Uploader {
     
     //make sure the file doesn't already exist, if it does, add an itteration to it
     $up_dir = $this->options['uploadDir'];
-    $target_path = $up_dir . DS . $this->file['name'];
-    $temp_path = substr($target_path, 0, strlen($target_path) - strlen($this->_ext())); //temp path without the ext
-    $i=1;
-		while(file_exists($target_path)){
-			$target_path = $temp_path . "-" . $i . $this->_ext();
-			$i++;
-		}
+    $fileName = $this->__handleFileNameCallback($this->file['name']);
+    $target_path = $up_dir . DS . $fileName;
+    $target_path = $this->__handleUnique($target_path);
     
     //now move the file.
     if(move_uploaded_file($this->file['tmp_name'], $target_path)){

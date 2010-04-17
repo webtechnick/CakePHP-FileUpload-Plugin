@@ -26,7 +26,10 @@ class FileUploadSettings {
     */
   var $defaults = array(
     /**
-      * Component Setting Only.
+      * Component and Behavior Setting.
+      *
+      * If using the behavior, and a fileNameFunction setting is detected
+      * the fileModel setup here will be used by default.
       *
       * fileModel is the name of the model used if we want to 
       *  keep records of uploads in a database.
@@ -67,6 +70,8 @@ class FileUploadSettings {
     'allowedTypes' => array('image/jpeg','image/gif','image/png','image/pjpeg','image/x-png'),
     
     /**
+      * Component and Behavior Setting.
+      *
       * Max file size in bytes
       * @var mixed false ignore maxFileSize (php.ini limit). int bytes of max file size
       */
@@ -76,6 +81,7 @@ class FileUploadSettings {
       * Component and Behavior Setting.
       * 
       * fields are the fields relating to the database columns
+      * @var array of fields related to database columns.
       */
     'fields' => array('name'=>'name','type'=>'type','size'=>'size'),
     
@@ -86,6 +92,9 @@ class FileUploadSettings {
       * along with just the Uploaded data.  By default this is turned off.
       * Turning this feature on will require you to have your model associations
       * set correctly in your Upload model.
+      * @var boolean
+      * - if true: a saveAll() will be executed.
+      * - if false: a save() will be executed (default)
       */
     'massSave' => false,
     
@@ -93,13 +102,64 @@ class FileUploadSettings {
       * Component Setting Only.
       * 
       * automatic determines if the process of all files will be called automatically upon detection.
-      * if true: files are processed as soon as they come in
-      * if false: when a file is ready hasFile is set to true
       * it is then up to the calling application to call processAllFiles()
       * whenever it wants. this allows params to be changed per uploaded file
       * (save every file in a different folder for instance)
+      * @var boolean 
+      * - if true: files are processed as soon as they come in (default)
+      * - if false: when a file is ready hasFile is set to true
       */
-    'automatic' => true 
+    'automatic' => true,
+    
+    /**
+      * Behavior Setting Only.
+      *
+      * required determines and checks if a file was sent to the server.
+      * @var boolean
+      * - if true: a file is required to be uploaded to save relative records
+      * - if false: related records will saved even if there is no uploaded file (default)
+      */
+    'required' => false,
+    
+    /**
+      * Component and Behavior Setting.
+      * 
+      * unique will decide if uploaded files can overwrite other files of the same name
+      * if true: uploaded files will never overwrite other files of the same name (default)
+      * if false: uploaded files can overwrite files of the same name.
+      */
+    'unique' => true,
+    
+    /**
+      * Behavior Setting Only.
+      *
+      * Define a model or function callback for the filename.
+      * You can define this function within your attaching model
+      * or as a stand-alone function somewhere in your app.
+      *
+      * The function will take in the current fileName to be saved to the
+      * database and allow the user to return the desired fileName defined 
+      * by the function
+      *
+      * Note: be sure to return the fileName or the file will not be saved
+      *
+      * Model callback example:
+      *  'fileNameFunction' => 'sanitizeFileName'
+      *
+      * Example defined in your model:
+      *  function sanitizeFileName($fileName){
+      *    //Logic for sanitizing your filename
+      *    return 'prefix_' . $fileName;
+      *  }
+      *  
+      *  You can also set a standard PHP string parsing like sha1, or md5 for your filenames.
+      *
+      * Example of using basic PHP string parsing function:
+      *  'fileNameFunction' => 'sha1'
+      *  'fileNameFunction' => 'md5'
+      *  'fileNameFunction' => 'crc32'
+      */
+    'fileNameFunction' => false
   );
 
 }
