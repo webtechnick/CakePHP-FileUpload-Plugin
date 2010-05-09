@@ -2,16 +2,18 @@ AUTHOR: Nick Baker
 VERSION: 5.0.0
 EMAIL: nick@webtechnick.com
 
+Get it
+======================
+Download: http://projects.webtechnick.com/file_upload_plugin.tar.gz
+SVN: http://svn.github.com/webtechnick/CakePHP-FileUpload-Plugin
+GIT: git@github.com:webtechnick/CakePHP-FileUpload-Plugin.git
+
 INSTALL:
+======================
 copy the file_upload directory into your app/plugins/ directory
 
-SVN:
-svn checkout http://svn2.xp-dev.com/svn/nurvzy-file-upload-plugin file_upload
-
-DOWNLOAD:
-http://projects.webtechnick.com/file_upload_plugin
-
 BLOG ARTICLE:
+======================
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
