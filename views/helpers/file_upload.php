@@ -4,15 +4,14 @@
   * This helper REQUIRES the FileUploadComponent.
   *
   * @author: Nick Baker
-  * @version: 4.1.2
+  * @version: 5.0.0
   * @email: nick@webtechnick.com
   * @link: http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
-  * @svn: svn checkout http://svn2.xp-dev.com/svn/nurvzy-file-upload-plugin file_upload
   *
   * @example
   *      Show an already uploaded image
-  *      $fileUpload->image('filename.jpg', array('width => 250')); //resizes a thumbnail of 'filename.jpg' to 250
-  *      $fileUpload->image('filename.jpg', array('width => 250', 'uploadDir' => 'custom/dir')); //resizes a thumbnail of 'webroot/custom/dir/filename.jpg' to 250
+  *      $fileUpload->image('filename.jpg', array('width' => 250)); //resizes a thumbnail of 'filename.jpg' to 250
+  *      $fileUpload->image('filename.jpg', array('width' => 250, 'uploadDir' => 'custom/dir')); //resizes a thumbnail of 'webroot/custom/dir/filename.jpg' to 250
   *
   *      Show the upload field form
   *      $fileUpload->input(); //builds the input form based on your FileUploadComponent defaults
