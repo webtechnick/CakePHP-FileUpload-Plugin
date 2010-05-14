@@ -99,7 +99,7 @@ Assuming an Application->hasMany->Uploads you could do the following:
   echo $form->end('Save Application and Two Uploads');
 ?>
 
-The Behavior method is by far the easiet and most flexible way to get up and rolling with file uploads.
+The Behavior method is by far the easiest and most flexible way to get up and rolling with file uploads.
 
 
 ===================== COMPONENT CONFIGURATION (NOT RECOMMENDED) ==========================
