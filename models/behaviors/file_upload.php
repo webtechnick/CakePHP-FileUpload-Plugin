@@ -12,7 +12,7 @@
   *     'FileUpload.FileUpload' => array(
   *       'uploadDir'    => 'files',
   *       'fields'       => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
-  *       'allowedTypes' => array('application/pdf'),
+  *       'allowedTypes' => array('pdf' => array('application/pdf')),
   *       'required'    => false,
   *       'unique' => false //filenames will overwrite existing files of the same name. (default true)
   *       'fileNameFunction' => 'sha1' //execute the Sha1 function on a filename before saving it (default false)
@@ -21,7 +21,7 @@
   *
   *
   * @note: Please review the plugins/file_upload/config/file_upload_settings.php file for details on each setting.
-  * @version: since 5.0.0
+  * @version: since 6.0.0
   * @author: Nick Baker
   * @link: http://www.webtechnick.com
   */

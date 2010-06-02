@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 5.0.1
+VERSION: 6.0.0
 EMAIL: nick@webtechnick.com
 
 Get it
@@ -17,6 +17,8 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+  6.0.0: Change the way file uploads types are checked.  Now checking extension along with filetypes. 
+       : ****** Please read migration guide.  migration_guide_5_0_x_to_6_0_x.txt ******
   5.0.1: Fixed a bug that would continue a file upload if the fileName returned false after a filename callback.
   5.0.0: Major release tag
   4.4.0: Added new fileName maniupluation callbacks and settings.
@@ -75,7 +77,7 @@ class Upload extends AppModel {
         'FileUpload.FileUpload' => array(
           'uploadDir' => 'files',
           'fields' => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
-          'allowedTypes' => array('application/pdf'),
+          'allowedTypes' => array('pdf' => array('application/pdf')),
           'required' => false, //default is false, if true a validation error would occur if a file wsan't uploaded.
           'maxFileSize' => '10000', //bytes OR false to turn off maxFileSize (default false)
           'unique' => false //filenames will overwrite existing files of the same name. (default true)
@@ -124,8 +126,18 @@ Upon submitting a file the FileUpload Component will automatically search for yo
 <?php 
 function beforeFilter(){
   parent::beforeFilter();
-  //defaults to 'image/jpeg','image/gif','image/png','image/pjpeg','image/x-png'
-  $this->FileUpload->allowedTypes(array('image/jpeg','text/plain')); 
+  /* defaults to:
+  'jpg' => array('image/jpeg', 'image/pjpeg'),
+  'jpeg' => array('image/jpeg', 'image/pjpeg'), 
+  'gif' => array('image/gif'),
+  'png' => array('image/png','image/x-png'),*/
+  
+  $this->FileUpload->allowedTypes(array(
+    'jpg' => array('image/jpeg','image/pjpeg'), 
+    'txt', 
+    'gif', 
+    'pdf' => array('application/pdf')
+  )); 
 }
 ?>
 

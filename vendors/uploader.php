@@ -3,7 +3,7 @@
   * Uploader class handles a single file to be uploaded to the file system
   * 
   * @author: Nick Baker
-  * @version: since 5.0.1
+  * @version: since 6.0.0
   * @link: http://www.webtechnick.com 
   */
 class Uploader {
@@ -189,12 +189,28 @@ class Uploader {
   */
   function checkType($file = null){
     $this->setFile($file);
-    foreach($this->options['allowedTypes'] as $value){
-      if(strtolower($this->file['type']) == strtolower($value) || $value == '*'){
+    foreach($this->options['allowedTypes'] as $ext => $types){      
+      if(!is_string($ext)){
+        $ext = $types;
+      }
+      if($ext == '*'){
         return true;
       }
+      
+      $ext = strtolower('.' . str_replace('.','', $ext));
+      $file_ext = strtolower($this->_ext());
+      if($file_ext == $ext){
+        if(is_array($types) && !in_array($this->file['type'], $types)){
+          $this->_error("{$this->file['type']} is not an allowed type.");
+          return false;
+        }
+        else {
+          return true;
+        }
+      }    
     }
-    $this->_error("{$this->file['type']} is not an allowed type.");
+
+    $this->_error("extension is not allowed.");
     return false;
   }
   

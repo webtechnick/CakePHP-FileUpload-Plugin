@@ -11,7 +11,7 @@ class FileUploadSettings {
     *     'FileUpload.FileUpload' => array(
     *       'uploadDir' => 'files',
     *       'fields' => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
-    *       'allowedTypes' => array('application/pdf')
+    *       'allowedTypes' => array('pdf' => array('application/pdf'))
     *     )
     *    )
     * 
@@ -21,7 +21,7 @@ class FileUploadSettings {
     *     $this->FileUpload->uploadDir('files');
     *     $this->FileUpload->fields(array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'));
     *     $this->FileUpload->fileModel('Upload');
-    *     $this->FileUpload->allowedTypes(array('application/pdf'));
+    *     $this->FileUpload->allowedTypes(array('pdf' => array('application/pdf')));
     *   }
     */
   var $defaults = array(
@@ -35,7 +35,7 @@ class FileUploadSettings {
       *  keep records of uploads in a database.
       * 
       * if you don't wish to use a database, simply set this to null in a controller
-      *  $this->FileUpload->fileModel = null;
+      *  $this->FileUpload->fileModel(null);
       */
     'fileModel' => 'Upload',
     
@@ -64,10 +64,27 @@ class FileUploadSettings {
       * Component and Behavior Setting.
       * 
       * allowedTypes is the allowed types of files that will be saved
-      * to the filesystem.  You can change it at anytime without
-      * $this->FileUpload->allowedTypes = array('text/plain',etc...);
+      * to the filesystem.  You can change it at anytime with
+      * 
+      * takes an associative array or a single value array of extentions
+      * 
+      * Example:
+      * $this->FileUpload->allowedTypes(array(
+      *    'jpg' => array('image/jpeg', 'image/pjpeg'), //validate only image/jpeg and image/pjpeg mime types with ext .jpg
+      *    'png' => array('image/png'),                 //validate only image/png mime type file with ext .png
+      *    'gif',                                       //validate all MIME types for ext .gif
+      *    'swf',                                       //validate all MIME types for ext .swf 
+      *    'pdf' => array('application/pdf'),           //validate only application/pdf mime type for ext .pdf
+      *  ));
+      * 
+      * @var array of acceptable extensions and their mime types.
       */
-    'allowedTypes' => array('image/jpeg','image/gif','image/png','image/pjpeg','image/x-png'),
+    'allowedTypes' => array(
+      'jpg' => array('image/jpeg', 'image/pjpeg'),
+      'jpeg' => array('image/jpeg', 'image/pjpeg'), 
+      'gif' => array('image/gif'),
+      'png' => array('image/png','image/x-png'),
+    ),
     
     /**
       * Component and Behavior Setting.

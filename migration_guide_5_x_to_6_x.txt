@@ -1,0 +1,44 @@
+Migration Guide 5.0.x to 6.x
+
+Version 6 of the FileUpload Plugins comes with a more secure way to check file types being uploaded to the server. The FileUpload Plugin now checks extensions along with the expected mime type.   As such, defining allowedTypes for plugin have changed significantly.
+
+file_upload/config/file_upload_settings.php
+/**
+  * Component and Behavior Setting.
+  * 
+  * allowedTypes is the allowed extensions and thier mime types 
+  * types of files that will be saved to the filesystem.  
+  * You can change this on the fly through the behavior settings or component
+  * settings.
+  * 
+  * $this->FileUpload->allowedTypes(array(
+  *    'jpg' => array('image/jpeg', 'image/pjpeg'), //validate only image/jpeg and image/pjpeg mime types with ext .jpg
+  *    'png' => array('image/png'),                 //validate only image/png mime type file with ext .png
+  *    'gif',                                       //validate all MIME types for ext .gif
+  *    'swf',                                       //validate all MIME types for ext .swf 
+  *    'pdf' => array('application/pdf'),           //validate only application/pdf mime type for ext .pdf
+  *  ));
+  * 
+  * @var array of acceptable extensions and their mime types.
+  */
+'allowedTypes' => array(
+  'jpg' => array('image/jpeg', 'image/pjpeg'),
+  'jpeg' => array('image/jpeg', 'image/pjpeg'), 
+  'gif' => array('image/gif'),
+  'png' => array('image/png','image/x-png'),
+),
+
+In short, the plugin now checks extension first and foremost, if a set of mime types are associated with that extention the uploaded file's mime type must also match.  If no mime types are set for a particular extention all types are for that extensions are accepted.
+    
+This is a major change from the old way of setting allowedTypes as a single level array.
+
+This means for those of you with custom allowedTypes in your configurations you will need to update the way you configuration.
+
+============OLD WAY============
+$this->FileUpload->allowedTypes(array('application/pdf'));
+
+============NEW WAY============
+$this->FileUpload->allowedTypes(array('pdf' => array('application/pdf')));
+
+
+I've updated all the documentation everywhere to reflect this change.
