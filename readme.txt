@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 5.0.0
+VERSION: 5.0.1
 EMAIL: nick@webtechnick.com
 
 Get it
@@ -17,6 +17,7 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+  5.0.1: Fixed a bug that would continue a file upload if the fileName returned false after a filename callback.
   5.0.0: Major release tag
   4.4.0: Added new fileName maniupluation callbacks and settings.
   4.3.0: Added a new 'maxFileSize' validation key.

@@ -3,7 +3,7 @@
   * Uploader class handles a single file to be uploaded to the file system
   * 
   * @author: Nick Baker
-  * @version: since 5.0.0
+  * @version: since 5.0.1
   * @link: http://www.webtechnick.com 
   */
 class Uploader {
@@ -129,6 +129,10 @@ class Uploader {
     //make sure the file doesn't already exist, if it does, add an itteration to it
     $up_dir = $this->options['uploadDir'];
     $fileName = $this->__handleFileNameCallback($this->file['name']);
+    //if callback returns false hault the upload 
+    if(!$fileName){
+      return false;
+    }    
     $target_path = $up_dir . DS . $fileName;
     $target_path = $this->__handleUnique($target_path);
     
