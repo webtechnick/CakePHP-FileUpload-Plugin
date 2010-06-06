@@ -1,6 +1,6 @@
 <?php
 App::import('Behavior', 'FileUpload.FileUpload');
-class Upload extends CakeTestModel {
+class TestUpload extends CakeTestModel {
   var $name = 'Upload';
   var $data = null;
   var $useDbConfig = 'test_suite';
@@ -15,7 +15,7 @@ class FileUploadTest extends CakeTestCase {
 
   function startTest(){
     $this->FileUpload = new FileUploadBehavior();
-    $this->Upload = new Upload();
+    $this->Upload = new TestUpload();
   }
   
   
