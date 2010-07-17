@@ -10,7 +10,7 @@
   * @example 
   *   var $actsAs = array(
   *     'FileUpload.FileUpload' => array(
-  *       'uploadDir'    => 'files',
+  *       'uploadDir'    => WEB_ROOT . DS . 'files',
   *       'fields'       => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
   *       'allowedTypes' => array('pdf' => array('application/pdf')),
   *       'required'    => false,
@@ -21,7 +21,7 @@
   *
   *
   * @note: Please review the plugins/file_upload/config/file_upload_settings.php file for details on each setting.
-  * @version: since 6.0.0
+  * @version: since 6.1.0
   * @author: Nick Baker
   * @link: http://www.webtechnick.com
   */
@@ -45,7 +45,7 @@ class FileUploadBehavior extends ModelBehavior {
     $this->options = array_merge($FileUploadSettings->defaults, $options);
         
     $uploader_settings = $this->options;
-    $uploader_settings['uploadDir'] = WWW_ROOT . $uploader_settings['uploadDir'];
+    $uploader_settings['uploadDir'] = $this->options['forceWebroot'] ? WWW_ROOT . $uploader_settings['uploadDir'] : $uploader_settings['uploadDir']; 
     $uploader_settings['fileModel'] = $Model->alias;
     $this->Uploader = new Uploader($uploader_settings);
   }

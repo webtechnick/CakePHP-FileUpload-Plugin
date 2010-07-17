@@ -173,7 +173,7 @@ class FileUploadComponent extends Object{
     $this->automatic = $this->automatic();
     
     $uploader_settings = $this->options;
-    $uploader_settings['uploadDir'] = WWW_ROOT . $uploader_settings['uploadDir'];
+    $uploader_settings['uploadDir'] = $this->options['forceWebroot'] ? WWW_ROOT . $uploader_settings['uploadDir'] : $uploader_settings['uploadDir']; 
     $this->Uploader = new Uploader($uploader_settings);
     
     $this->uploadDetected = ($this->_multiArrayKeyExists("tmp_name", $this->data) || $this->_multiArrayKeyExists("tmp_name",$this->params));
@@ -198,7 +198,7 @@ class FileUploadComponent extends Object{
       return false;
     }
     
-    $up_dir = WWW_ROOT . $this->options['uploadDir'];
+    $up_dir = $this->options['forceWebroot'] ? WWW_ROOT . $this->options['uploadDir'] : $this->options['uploadDir'];
     $target_path = $up_dir . DS . $name;
     
     //delete main image -- $name

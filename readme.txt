@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 6.0.0
+VERSION: 6.1.0
 EMAIL: nick@webtechnick.com
 
 Get it
@@ -17,6 +17,8 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
+  6.1.1: Allow users to change the uploadDir outside of WEB_ROOT by changing setting forceWebroot to false in the configuration.
+         Default is still webroot/files.  Updated typos in the README.txt
   6.0.0: Change the way file uploads types are checked.  Now checking extension along with filetypes. 
        : ****** Please read migration guide.  migration_guide_5_0_x_to_6_0_x.txt ******
   5.0.1: Fixed a bug that would continue a file upload if the fileName returned false after a filename callback.
@@ -76,6 +78,7 @@ class Upload extends AppModel {
   var $actsAs = array(
         'FileUpload.FileUpload' => array(
           'uploadDir' => 'files',
+          'forceWebroot' => true //if false, files will be upload to the exact path of uploadDir
           'fields' => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
           'allowedTypes' => array('pdf' => array('application/pdf')),
           'required' => false, //default is false, if true a validation error would occur if a file wsan't uploaded.
@@ -306,10 +309,10 @@ ADDITIONAL CONTRIBUTIONS:
 @Elmer 2/9/2009 (http://bakery.cakephp.org/articles/view/file-upload-component-w-automagic-model-optional):
 "As long as the automatic var is true (default), the component works as always. But if it is set to false, processFile() is no longer called automatically. From my controller I can now set an upload folder and call processFile() when I'm ready."
 
-You can turn off automatic file uploading by setting $this->FileUpload->automatic = false; in a beforeFilter.
+You can turn off automatic file uploading by setting $this->FileUpload->automatic(false); in a beforeFilter.
 Then you would call processAllFiles() when you see fit like so:
 
 if ($this->FileUpload->hasFile) {
-    $this->FileUpload->uploadDir = 'files/sub/dir/1/2/3';
-    $this->FileUpload->processAllFile();
+    $this->FileUpload->uploadDir('files/sub/dir/1/2/3');
+    $this->FileUpload->processAllFiles();
 } 

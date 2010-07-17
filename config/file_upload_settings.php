@@ -9,7 +9,7 @@ class FileUploadSettings {
     * Behavior settings overwrite example:
     *   var $actsAs = array(
     *     'FileUpload.FileUpload' => array(
-    *       'uploadDir' => 'files',
+    *       'uploadDir' => WWW_ROOT . 'files',
     *       'fields' => array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'),
     *       'allowedTypes' => array('pdf' => array('application/pdf'))
     *     )
@@ -18,7 +18,7 @@ class FileUploadSettings {
     *  Component settings overwrite example:
     *   function beforeFilter(){
     *     parent::beforeFilter();
-    *     $this->FileUpload->uploadDir('files');
+    *     $this->FileUpload->uploadDir(WWW_ROOT . 'files');
     *     $this->FileUpload->fields(array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size'));
     *     $this->FileUpload->fileModel('Upload');
     *     $this->FileUpload->allowedTypes(array('pdf' => array('application/pdf')));
@@ -55,10 +55,21 @@ class FileUploadSettings {
       * Component and Behavior Setting.
       * 
       * uploadDir is the directory name in the webroot that you want
-      * the uploaded files saved to.  default: files which means
+      * the uploaded files saved to.  default: webroot/files which means
       * webroot/files must exist and set to chmod 777
       */
-    'uploadDir' => 'files',
+    'uploadDir' => "files",
+    
+    /**
+      * Component and Behavior Setting.
+      *
+      * forceWebroot so that the uploadDir is appened to WWW_ROOT constant setup by
+      * CakePHP.  true by default.
+      *
+      * If forceWebroot is set to false, the uploads will attempt to upload to the exact path
+      * of uploadDir.
+      */
+    'forceWebroot' => true,
     
     /**
       * Component and Behavior Setting.
