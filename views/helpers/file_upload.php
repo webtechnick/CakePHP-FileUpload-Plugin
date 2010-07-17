@@ -4,7 +4,7 @@
   * This helper REQUIRES the FileUploadComponent.
   *
   * @author: Nick Baker
-  * @version: 5.0.0
+  * @version: 6.1.1
   * @email: nick@webtechnick.com
   * @link: http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
   *
@@ -268,7 +268,7 @@ class FileUploadHelper extends AppHelper{
     */
   function _htmlImage(){
     if(!$this->_isOutsideSource() && $this->options['autoResize'] && $this->options['width'] > 0){
-      if(isset($this->newImage) && $this->newImage->imgWidth && $this->newImage->imgWidth < $this->options['width']){
+      if(isset($this->newImage) && $this->newImage->imgWidth && $this->newImage->imgWidth <= $this->options['width']){
         $image = $this->_getImagePath();
       }
       else {

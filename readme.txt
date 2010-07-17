@@ -1,5 +1,5 @@
 AUTHOR: Nick Baker
-VERSION: 6.1.0
+VERSION: 6.1.1
 EMAIL: nick@webtechnick.com
 
 Get it
@@ -17,7 +17,8 @@ BLOG ARTICLE:
 http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin
 
 CHANGELOG:
-  6.1.1: Allow users to change the uploadDir outside of WEB_ROOT by changing setting forceWebroot to false in the configuration.
+  6.1.1: Fixed a bug that would not display an image if the source image is the same width as the resize image requested. 
+  6.1.0: Allow users to change the uploadDir outside of WEB_ROOT by changing setting forceWebroot to false in the configuration.
          Default is still webroot/files.  Updated typos in the README.txt
   6.0.0: Change the way file uploads types are checked.  Now checking extension along with filetypes. 
        : ****** Please read migration guide.  migration_guide_5_0_x_to_6_0_x.txt ******
