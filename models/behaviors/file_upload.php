@@ -98,6 +98,11 @@ class FileUploadBehavior extends ModelBehavior {
           $Model->validationErrors[$this->options[$Model->alias]['fileVar']] = $this->Uploader[$Model->alias]->showErrors();
         }
       }
+      else {
+        if(isset($this->options[$Model->alias]['required']) && $this->options[$Model->alias]['required']){
+          $Model->validationErrors[$this->options[$Model->alias]['fileVar']] = 'Select file to upload';
+        }
+      }
     }
     elseif(isset($this->options[$Model->alias]['required']) && $this->options[$Model->alias]['required']){
       $Model->validationErrors[$this->options[$Model->alias]['fileVar']] = 'No File';
