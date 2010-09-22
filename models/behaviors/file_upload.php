@@ -32,7 +32,7 @@ class FileUploadBehavior extends ModelBehavior {
   /**
     * Uploader is the uploader instance of class Uploader. This will handle the actual file saving.
     */
-  var $Uploader = null;
+  var $Uploader = array();
   
   /**
     * Setup the behavior
@@ -42,12 +42,12 @@ class FileUploadBehavior extends ModelBehavior {
     if(!is_array($options)){
       $options = array();
     }
-    $this->options = array_merge($FileUploadSettings->defaults, $options);
+    $this->options[$Model->alias] = array_merge($FileUploadSettings->defaults, $options);
         
-    $uploader_settings = $this->options;
-    $uploader_settings['uploadDir'] = $this->options['forceWebroot'] ? WWW_ROOT . $uploader_settings['uploadDir'] : $uploader_settings['uploadDir']; 
+    $uploader_settings = $this->options[$Model->alias];
+    $uploader_settings['uploadDir'] = $this->options[$Model->alias]['forceWebroot'] ? WWW_ROOT . $uploader_settings['uploadDir'] : $uploader_settings['uploadDir']; 
     $uploader_settings['fileModel'] = $Model->alias;
-    $this->Uploader = new Uploader($uploader_settings);
+    $this->Uploader[$Model->alias] = new Uploader($uploader_settings);
   }
  
   /**
@@ -55,20 +55,20 @@ class FileUploadBehavior extends ModelBehavior {
     *
     */
   function beforeSave(&$Model){
-    if(isset($Model->data[$Model->alias][$this->options['fileVar']])){
-      $file = $Model->data[$Model->alias][$this->options['fileVar']];
-      $this->Uploader->file = $file;
+    if(isset($Model->data[$Model->alias][$this->options[$Model->alias]['fileVar']])){
+      $file = $Model->data[$Model->alias][$this->options[$Model->alias]['fileVar']];
+      $this->Uploader[$Model->alias]->file = $file;
       
-      if($this->Uploader->hasUpload()){
-        $fileName = $this->Uploader->processFile();
+      if($this->Uploader[$Model->alias]->hasUpload()){
+        $fileName = $this->Uploader[$Model->alias]->processFile();
         if($fileName){
-          $Model->data[$Model->alias][$this->options['fields']['name']] = $fileName;
-          $Model->data[$Model->alias][$this->options['fields']['size']] = $file['size'];
-          $Model->data[$Model->alias][$this->options['fields']['type']] = $file['type'];
+          $Model->data[$Model->alias][$this->options[$Model->alias]['fields']['name']] = $fileName;
+          $Model->data[$Model->alias][$this->options[$Model->alias]['fields']['size']] = $file['size'];
+          $Model->data[$Model->alias][$this->options[$Model->alias]['fields']['type']] = $file['type'];
         } else {
           return false; // we couldn't save the file, return false
         }
-        unset($Model->data[$Model->alias][$this->options['fileVar']]);
+        unset($Model->data[$Model->alias][$this->options[$Model->alias]['fileVar']]);
       }
       else {
         unset($Model->data[$Model->alias]);
@@ -82,20 +82,20 @@ class FileUploadBehavior extends ModelBehavior {
     * presents the user the errors.
     */
   function beforeValidate(&$Model){
-    if(isset($Model->data[$Model->alias][$this->options['fileVar']])){
-      $file = $Model->data[$Model->alias][$this->options['fileVar']];
-      $this->Uploader->file = $file;
-      if($this->Uploader->hasUpload()){
-        if($this->Uploader->checkFile() && $this->Uploader->checkType() && $this->Uploader->checkSize()){
+    if(isset($Model->data[$Model->alias][$this->options[$Model->alias]['fileVar']])){
+      $file = $Model->data[$Model->alias][$this->options[$Model->alias]['fileVar']];
+      $this->Uploader[$Model->alias]->file = $file;
+      if($this->Uploader[$Model->alias]->hasUpload()){
+        if($this->Uploader[$Model->alias]->checkFile() && $this->Uploader[$Model->alias]->checkType() && $this->Uploader[$Model->alias]->checkSize()){
           $Model->beforeValidate();
         }
         else {
-          $Model->validationErrors[$this->options['fileVar']] = $this->Uploader->showErrors();
+          $Model->validationErrors[$this->options[$Model->alias]['fileVar']] = $this->Uploader[$Model->alias]->showErrors();
         }
       }
     }
-    elseif(isset($this->options['required']) && $this->options['required']){
-      $Model->validationErrors[$this->options['fileVar']] = 'No File';
+    elseif(isset($this->options[$Model->alias]['required']) && $this->options[$Model->alias]['required']){
+      $Model->validationErrors[$this->options[$Model->alias]['fileVar']] = 'No File';
     }
     return $Model->beforeValidate();
   }
@@ -107,7 +107,7 @@ class FileUploadBehavior extends ModelBehavior {
     $Model->recursive = -1;
     $data = $Model->read();
     
-    $this->Uploader->removeFile($data[$Model->alias][$this->options['fields']['name']]);
+    $this->Uploader[$Model->alias]->removeFile($data[$Model->alias][$this->options[$Model->alias]['fields']['name']]);
     return $Model->beforeDelete($cascade);
   }
   
