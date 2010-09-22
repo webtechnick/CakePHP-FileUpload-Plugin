@@ -34,6 +34,11 @@ class FileUploadBehavior extends ModelBehavior {
     */
   var $Uploader = array();
   
+  function setFileUploadOption(&$Model, $key, $value) {
+    $this->options[$Model->alias][$key] = $value;
+    $this->Uploader[$Model->alias]->setOption($key, $value);
+  }
+  
   /**
     * Setup the behavior
     */

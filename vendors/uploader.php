@@ -59,6 +59,10 @@ class Uploader {
     $this->options = array_merge($this->options, $options);
   }
   
+  function setOption($key, $value){
+    $this->options[$key] = $value;
+  }
+  
   /**
     * Preform requested callbacks on the filename.
     *
