@@ -218,7 +218,7 @@ Uploading Multiple Files
 
 
 
-# WITHOUT MODEL CONFIGURATION
+## WITHOUT MODEL CONFIGURATION
 
 If you wish to *NOT* use a model simply set `$this->FileUpload->fileModel(null);` in a beforeFilter.
 		<?php 
@@ -229,7 +229,7 @@ If you wish to *NOT* use a model simply set `$this->FileUpload->fileModel(null);
 			}
 		?>
 
-## VIEW WITHOUT MODEL
+### VIEW WITHOUT MODEL
 
 	<input type="file" name="file" />
 
