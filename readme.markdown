@@ -106,7 +106,16 @@ Assuming an Application->hasMany->Uploads you could do the following:
 			echo $form->end('Save Application and Two Uploads');
 		?>
 
-The Behavior method is by far the easiest and most flexible way to get up and rolling with file uploads. 
+The Behavior method is by far the easiest and most flexible way to get up and rolling with file uploads.
+
+# VIEWING AN UPLOADED PHOTO EXAMPLES
+To View the photo variable you might type something like
+
+		$this->Html->image("/files/$photo");
+
+Example with FileUploadHelper:
+
+		$this->FileUpload->image($photo);
 
 
 # COMPONENT CONFIGURATION (NOT RECOMMENDED)
@@ -218,7 +227,7 @@ Uploading Multiple Files
 
 
 
-## WITHOUT MODEL CONFIGURATION
+### WITHOUT MODEL CONFIGURATION
 
 If you wish to *NOT* use a model simply set `$this->FileUpload->fileModel(null);` in a beforeFilter.
 		<?php 
@@ -229,7 +238,7 @@ If you wish to *NOT* use a model simply set `$this->FileUpload->fileModel(null);
 			}
 		?>
 
-### VIEW WITHOUT MODEL
+#### VIEW WITHOUT MODEL
 
 	<input type="file" name="file" />
 
@@ -237,20 +246,20 @@ OR
 	
 	<?= $fileUpload->input(array('var' => 'file', 'model' => false)); ?>
 
-### Multiple File Uploading
+#### Multiple File Uploading
 The helper will do all the work for you, just output input multiple times and the rest will be done for you.
 		<?php echo $fileUpload->input(array('var' => 'file', 'model' => false)); ?>
 		<?php echo $fileUpload->input(array('var' => 'file', 'model' => false)); ?>
 		<?php echo $fileUpload->input(array('var' => 'file', 'model' => false)); ?>
 
-### Without Helper example:
+#### Without Helper example:
 		<input type="file" name="data[file][0]" />
 		<input type="file" name="data[file][1]" />
 		<input type="file" name="data[file][2]" />
 
 
 
-# CONTROLLER EXAMPLES
+## CONTROLLER EXAMPLES
 If a fileModel is given, it will attempt to save the record of the uploaded file to the database for later use. Upon success the FileComponent sets `$this->FileUpload->success` to TRUE; You can use this variable to test in your controller like so:
 
 		<?php 
@@ -291,10 +300,3 @@ At any time you can remove a file by using the `$this->FileUpload->removeFile($n
 			}
 		}
 		?>
-
-# VIEWING AN UPLOADED PHOTO EXAMPLES
-To View the photo variable you might type something like
-`$html->image("/files/$photo");`
-
-Example with FileUploadHelper:
-`$fileUpload->image($photo);`
