@@ -93,6 +93,18 @@ for automatic file uploading simply pass them into your attachment like so:
 
 
 ## View Setup
+
+Creating a view is actually quite simple.  You use an input called `file` and the Behavior will take care of the rest.
+The important thing to remember is to use `'type' => 'file'` when creating the form.
+
+Here is a trivial example:
+
+		<?php
+			echo $form->create('Upload', array('type' => 'file'));
+			echo $form->input('file', array('type' => 'file'));
+			echo $form->end();
+		?>
+
 Now with your upload model set, you'll be able to upload files and save to your database even through associations in other models.
 Example:
 
