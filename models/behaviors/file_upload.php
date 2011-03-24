@@ -26,7 +26,7 @@
   * @link: http://www.webtechnick.com
   */
 App::import('Vendor', 'FileUpload.uploader');
-App::import('Config', 'FileUpload.file_upload_settings');
+require_once(dirname(__FILE__) . DS . '..' . DS . '..' . DS . 'config' . DS . 'file_upload_settings.php');
 class FileUploadBehavior extends ModelBehavior {
   
   /**
@@ -43,7 +43,7 @@ class FileUploadBehavior extends ModelBehavior {
     * Setup the behavior
     */
   function setUp(&$Model, $options = array()){
-    $FileUploadSettings = new FileUploadSettings;
+    $FileUploadSettings = new FileUploadSettings();
     if(!is_array($options)){
       $options = array();
     }
