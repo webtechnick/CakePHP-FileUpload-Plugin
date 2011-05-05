@@ -88,7 +88,7 @@ class Uploader {
       }
       
       if(!$fileName){
-        $this->_error('No filename resulting after parsing. Function: ' . $this->options['fileNameFunction']);
+        $this->_error(sprintf(__('No filename resulting after parsing. Function: %s',true),$this->options['fileNameFunction']));
       }
     }
     return $fileName;
@@ -146,7 +146,7 @@ class Uploader {
       return $this->finalFile;
     }
     else{
-      $this->_error('Unable to save temp file to file system.');
+      $this->_error(__('Unable to save temp file to file system.',true));
       return false;
     }
   }
@@ -181,7 +181,7 @@ class Uploader {
   * @access protected
   */
   function _error($text){
-    $this->errors[] = __($text,true);
+    $this->errors[] = $text;
   }
   
   /**
@@ -205,7 +205,7 @@ class Uploader {
       $file_ext = strtolower($this->_ext());
       if($file_ext == $ext){
         if(is_array($types) && !in_array($this->file['type'], $types)){
-          $this->_error("{$this->file['type']} is not an allowed type.");
+          $this->_error(sprintf(__('%s is not an allowed type.',true),$this->file['type']));
           return false;
         }
         else {
@@ -214,7 +214,7 @@ class Uploader {
       }    
     }
 
-    $this->_error("extension is not allowed.");
+    $this->_error(__('extension is not allowed.',true));
     return false;
   }
   
@@ -232,7 +232,7 @@ class Uploader {
         return true;
       }
       else {
-        $this->_error($this->uploadErrors[$this->file['error']]);
+        $this->_error(__($this->uploadErrors[$this->file['error']],true));
       }
     }        
     return false;
@@ -255,7 +255,7 @@ class Uploader {
         return true;
       }
       else {
-        $this->_error("File exceeds {$this->options['maxFileSize']} byte limit.");
+        $this->_error(sprintf(__('File exceeds %s byte limit.',true),$this->options['maxFileSize']));
       }
     }
     return false;
