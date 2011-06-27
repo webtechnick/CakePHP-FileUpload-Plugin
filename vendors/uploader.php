@@ -136,7 +136,8 @@ class Uploader {
     //if callback returns false hault the upload 
     if(!$fileName){
       return false;
-    }    
+    }
+		$fileName = $this->clearUTF($fileName);
     $target_path = $up_dir . DS . $fileName;
     $target_path = $this->__handleUnique($target_path);
     
@@ -343,5 +344,18 @@ class Uploader {
     return false;
   }
 
+	function clearUTF($s){
+		setlocale(LC_ALL, 'en_US.UTF8');
+		$r = '';
+		$s1 = iconv('UTF-8', 'ASCII//TRANSLIT', $s);
+			for ($i = 0; $i < strlen($s1); $i++){
+				$ch1 = $s1[$i];
+				$ch2 = mb_substr($s, $i, 1);
+
+				$r .= $ch1=='?'?$ch2:$ch1;
+			}
+		return $r;
+	}
+	
 }
 ?>
