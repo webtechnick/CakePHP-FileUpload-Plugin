@@ -76,7 +76,12 @@ class FileUploadBehavior extends ModelBehavior {
         unset($Model->data[$Model->alias][$this->options[$Model->alias]['fileVar']]);
       }
       else {
-        unset($Model->data[$Model->alias]);
+	if ($this->options[$Model->alias]['allowEmpty']) {
+	  //unset only the file portion of the model so that the rest fo the model's data will be saved
+	  unset($Model->data[$Model->alias]['file']);
+	} else {
+	  unset($Model->data[$Model->alias]);
+	}
       }
     }
     return $Model->beforeSave();
