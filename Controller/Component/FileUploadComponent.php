@@ -12,7 +12,7 @@
 */
 App::import('Vendor', 'FileUpload.uploader');
 App::import('Config', 'FileUpload.file_upload_settings');
-class FileUploadComponent extends Object{
+class FileUploadComponent extends Component{
   /**
     * options are the default options that will be used
     * 
@@ -397,7 +397,7 @@ class FileUploadComponent extends Object{
     * @access protected
     */
   function _error($text){
-    $message = __($text,true);
+    $message = __($text);
     $this->errors[] = $message;
     trigger_error($message,E_USER_WARNING);
   }
