@@ -187,7 +187,14 @@ class FileUploadSettings {
       *  'fileNameFunction' => 'md5'
       *  'fileNameFunction' => 'crc32'
       */
-    'fileNameFunction' => false
+    'fileNameFunction' => false,
+
+	/**
+	* To allow Model to be saved without the file fields if no file is uploaded.
+	*
+	* For use when using FileUpload directly on an existing Model.
+	*/
+	'allowEmpty' => false
   );
 
 }
