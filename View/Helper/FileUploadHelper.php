@@ -102,7 +102,6 @@ class FileUploadHelper extends AppHelper{
     * @return mixed html tag, url string, or false if unable to find image. 
     */
   function image($name, $options = array()){
-      debug($this->model());
     $this->fileName = $name;
     //options takes in a width as well
     if(is_int($options)){
@@ -207,7 +206,6 @@ class FileUploadHelper extends AppHelper{
     * @return String upload path of all files
     */
   function _getUploadPath(){
-      debug($this->settings['uploadDir'] . '/' . $this->fileName);
     return $this->settings['uploadDir'] . '/' . $this->fileName;
   }
   
