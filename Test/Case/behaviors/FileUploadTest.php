@@ -21,10 +21,10 @@ class FileUploadTest extends CakeTestCase {
   
   function testSetupShouldLoadDefaults(){
     $this->FileUpload->setUp($this->Upload);
-    $options = $this->FileUpload->Uploader->options;
+    $options = $this->FileUpload->Uploader['Upload']->options;
     
-    $this->assertEqual('Upload', $options['fileModel']);
-    $this->assertTrue(strpos($options['uploadDir'], 'webroot/files'));
+    $this->assertEqual('Upload', $options['fileModel']); 
+    $this->assertTextContains('webroot/files', $options['uploadDir']);
     $this->assertEqual('file', $options['fileVar']);
     $this->assertFalse($options['massSave']);
     $this->assertFalse($options['maxFileSize']);
@@ -44,10 +44,10 @@ class FileUploadTest extends CakeTestCase {
       'fileModel' => 'NotValidModel' //should ignore, and set model name to appropriate model
     );
     $this->FileUpload->setUp($this->Upload, $model_options);
-    $options = $this->FileUpload->Uploader->options;
+    $options = $this->FileUpload->Uploader['Upload']->options;
     
-    $this->assertEqual('Upload', $options['fileModel']);
-    $this->assertTrue(strpos($options['uploadDir'], 'webroot/uploads'));
+    $this->assertEqual('Upload', $options['fileModel']);    
+    $this->assertTextContains('webroot/uploads', $options['uploadDir']);
     $this->assertEqual('var', $options['fileVar']);
     $this->assertFalse($options['massSave']);
     $this->assertEqual(10000, $options['maxFileSize']);
