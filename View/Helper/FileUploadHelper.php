@@ -159,7 +159,7 @@ class FileUploadHelper extends AppHelper{
     
     $id = $this->fileName;
     $this->FileUpload->options['fileModel'] = $this->settings['fileModel'];
-    $Model =& $this->FileUpload->getModel();
+    $Model = $this->FileUpload->getModel();
     $Model->recursive = -1;
     $upload = $Model->findById($id);
     if(!empty($upload)){

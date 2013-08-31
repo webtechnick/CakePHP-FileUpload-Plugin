@@ -221,7 +221,7 @@ class FileUploadComponent extends Component{
       return false;
     }
     
-    $model =& $this->getModel();
+    $model = $this->getModel();
     if(!$model){
       $this->_error('FileUpload::removeFileById -- no model detected.');
       return false;
@@ -277,7 +277,7 @@ class FileUploadComponent extends Component{
       $save_data[$this->options['fileModel']][$this->options['fields']['name']] = $this->finalFile;
       $save_data[$this->options['fileModel']][$this->options['fields']['type']] = $this->currentFile['type'];
       $save_data[$this->options['fileModel']][$this->options['fields']['size']] = $this->currentFile['size'];
-      $model =& $this->getModel();
+      $model = $this->getModel();
       
       //Save it
       if(!$model){
@@ -378,7 +378,7 @@ class FileUploadComponent extends Component{
       if (PHP5) {
         $model = ClassRegistry::init($name);
       } else {
-        $model =& ClassRegistry::init($name);
+        $model = ClassRegistry::init($name);
       }
 
       if (empty($model) && $this->options['fileModel']) {
