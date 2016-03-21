@@ -1,0 +1,17 @@
+{
+	"name": "webtechnick/cakephp-fileupload",
+	"description": "WebTechNick's file upload plugin.",
+	"type": "cakephp-plugin",
+	"keywords": ["cakephp", "upload", "webtecknick"],
+	"homepage": "https://github.com/webtechnick/CakePHP-FileUpload-Plugin",
+	"authors": [
+		{
+			"name": "WebTechNick",
+			"homepage": "http://www.webtechnick.com",
+			"role": "Author"
+		}
+	],
+	"extra": {
+		"installer-name": "FileUpload"
+	}
+}
