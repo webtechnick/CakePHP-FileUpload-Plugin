@@ -5,11 +5,25 @@
 * BLOG ARTICLE: <http://www.webtechnick.com/blogs/view/221/CakePHP_File_Upload_Plugin>
 
 # INSTALL
-
+## Git clone
 clone into your `app/plugins/file_upload` directory
 	
 	git clone git://github.com/webtechnick/CakePHP-FileUpload-Plugin.git app/plugins/file_upload
 
+## Composer
+Alternatively, use composer package management. Add the following to your composer.json file's repositories/require sections:
+	
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/webtechnick/CakePHP-FileUpload-Plugin.git"
+		}
+	],
+	"require": {
+		"webtechnick/cakephp-fileupload": "dev-cakephp2.0"
+	}
+
+And run `composer install`.
 
 # CHANGELOG:
 * 6.1.1: Fixed a bug that would not display an image if the source image is the same width as the resize image requested. 
